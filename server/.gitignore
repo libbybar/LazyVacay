@@ -2,4 +2,9 @@ node_modules
 # Keep environment variables out of version control
 .env
 
+# Prisma generated client
+node_modules/.prisma/
 /generated/prisma
+
+# Backup node_modules exclusion
+node_modules/

@@ -22,25 +22,25 @@ model User {
   id           String        @id @default(uuid())
   email        String        @unique
   password     String
-  role         Role          @default(USER) 
+  role         Role          @default(USER)
   createdAt    DateTime      @default(now())
   reservations Reservation[]
 }
 
 model Hotel {
-  id      String @id @default(uuid())
-  name    String
-  city    String
-  rooms   Room[] 
+  id    String @id @default(uuid())
+  name  String
+  city  String
+  rooms Room[]
 }
 
 model Room {
-  id      String @id @default(uuid())
-  type    String  @default("Standard")
-  price   Float
-  hotelId String 
-  hotel   Hotel  @relation(fields: [hotelId], references: [id])
-  reservations Reservation[]
+  id           String        @id @default(uuid())
+  type         String        @default("Standard")
+  price        Float
+  hotelId      String
+  hotel        Hotel         @relation(fields: [hotelId], references: [id])
+  reservations Reservation[]
 }
 
 model Reservation {
@@ -51,5 +51,5 @@ model Reservation {
   user      User     @relation(fields: [userId], references: [id])
   roomId    String
   room      Room     @relation(fields: [roomId], references: [id])
-   createdAt    DateTime      @default(now())
+  createdAt DateTime @default(now())
 }
