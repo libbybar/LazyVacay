@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import { rateLimit } from "express-rate-limit"; 
+import { rateLimit } from "express-rate-limit";
 import { ERROR_CODES } from "./constants/errorCodes.js";
 import authRoutes from "./routes/authRoutes.js";
 import hotelsRoutes from "./routes/hotelsRoutes.js";
@@ -18,9 +18,9 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin) return callback(null, true); 
+        if (!origin) return callback(null, true);
 
-       
+
         if (isDevelopment && origin.startsWith("http://localhost:")) {
             return callback(null, true);
         }
@@ -33,29 +33,33 @@ app.use(cors({
     }
 }));
 
-app.use(helmet()); 
-app.use(express.json()); 
-
+app.use(helmet());
+app.use(express.json());
 const globalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    limit: 200, 
-    standardHeaders: "draft-6", 
-    legacyHeaders: false,
-    message: { error: "TOO_MANY_REQUESTS", devMessage: "Too many requests from this IP, please try again later." }
+  windowMs: 15 * 60 * 1000,
+  limit: 200,
+  standardHeaders: "draft-6",
+  legacyHeaders: false,
+  message: {
+    error: ERROR_CODES.TOO_MANY_REQUESTS,
+    devMessage: "Too many requests from this IP, please try again later."
+  }
 });
-app.use(globalLimiter); 
 
+app.use(globalLimiter);
 
 const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit: 10, 
-    standardHeaders: "draft-6",
-    legacyHeaders: false,
-    message: { error: "TOO_MANY_AUTH_ATTEMPTS", devMessage: "Too many auth attempts. Brute force protection activated." }
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-6",
+  legacyHeaders: false,
+  message: {
+    error: ERROR_CODES.TOO_MANY_AUTH_ATTEMPTS,
+    devMessage: "Too many auth attempts. Brute force protection activated."
+  }
 });
 
-
-app.use("/api/auth", authLimiter, authRoutes); 
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/hotels", hotelsRoutes);
 
 app.use((req, res) => {
@@ -67,9 +71,9 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
     console.error("[Server Error]:", err.stack);
-    
-    res.status(500).json({ 
-        error: ERROR_CODES.INTERNAL_SERVER_ERROR, 
+
+    res.status(500).json({
+        error: ERROR_CODES.INTERNAL_SERVER_ERROR,
         devMessage: isDevelopment ? err.message : "An unexpected server error occurred."
     });
 });

@@ -1,10 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
@@ -28,18 +26,23 @@ model User {
 }
 
 model Hotel {
-  id    String @id @default(uuid())
-  name  String
-  city  String
-  rooms Room[]
+  id            String @id @default(uuid())
+  name          String
+  country       String
+  city          String
+  numberOfRooms Int
+  stars         Int
+  rooms         Room[]
 }
 
 model Room {
   id           String        @id @default(uuid())
-  type         String        @default("Standard")
+  name         String
+  size         Float
+  maxGuests    Int
   price        Float
   hotelId      String
-  hotel        Hotel         @relation(fields: [hotelId], references: [id])
+  hotel        Hotel         @relation(fields: [hotelId], references: [id], onDelete: Cascade)
   reservations Reservation[]
 }
 

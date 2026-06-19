@@ -1,7 +1,7 @@
 import { Router } from "express";
 import prisma from "../prismaClient.js";
 import { ERROR_CODES } from "../constants/errorCodes.js";
-import { validateBooking } from "../middlewares/validateBooking.js"; 
+import { validateReservation } from "../middlewares/validateReservation.js";
 
 const router = Router();
 
@@ -57,45 +57,34 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/book", validateBooking, async (req, res, next) => {
+router.post("/reserve", validateReservation, async (req, res, next) => {
   try {
-    const { roomId, hotelId, userId } = req.body;
-    
+    const { roomId, userId } = req.body;
     const { start, end } = req.validatedDates;
 
-    const room = await prisma.room.findUnique({
-      where: { id: roomId }
-    });
-
-    // Required by project specification: validate that the selected room belongs to the selected hotel.
-    if (!room || room.hotelId !== hotelId) {
-      return res.status(400).json({
-        error: ERROR_CODES.INVALID_ROOM_HOTEL_MATCH,
-       devMessage: `Room ${roomId} does not belong to hotel ${hotelId}`
-      });
-    }
-
+   
     const conflictingReservation = await prisma.reservation.findFirst({
       where: {
         roomId,
-        startDate: { lt: end }, 
-        endDate: { gt: start }  
+        startDate: { lt: end },
+        endDate: { gt: start }
       }
     });
 
     if (conflictingReservation) {
       return res.status(400).json({
-        error: ERROR_CODES.ROOM_ALREADY_BOOKED,
-        devMessage: "The room is already booked for the selected dates"
+        error: ERROR_CODES.ROOM_ALREADY_BOOKED, 
+        devMessage: "The room is already reserved for the requested dates."
       });
     }
 
+  
     const newReservation = await prisma.reservation.create({
       data: {
-        startDate: start,
-        endDate: end,
+        roomId,
         userId,
-        roomId
+        startDate: start,
+        endDate: end
       }
     });
 
