@@ -21,13 +21,12 @@ function parseFlexibleDate(dateStr) {
 }
 
 export const validateReservation = (req, res, next) => {
-  const { roomId, startDate, endDate, userId } = req.body;
+  const { roomId, hotelId, startDate, endDate } = req.body;
 
-
-  if (!roomId || !startDate || !endDate || !userId) {
+  if (!roomId || !hotelId || !startDate || !endDate ) {
     return res.status(400).json({
       error: ERROR_CODES.MISSING_REQUIRED_FIELDS,
-      devMessage: "roomId, startDate, endDate, and userId are all required."
+      devMessage: "roomId, hotelId, startDate and endDate are all required."
     });
   }
 

@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
+import prisma from "./prismaClient.js";
 import { rateLimit } from "express-rate-limit";
 import { ERROR_CODES } from "./constants/errorCodes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -59,6 +60,16 @@ const authLimiter = rateLimit({
   }
 });
 
+app.post("/api/test-user", async (req, res) => {
+  const user = await prisma.user.create({
+    data: {
+      email: "testuser@gmail.com",
+      password: "password123"
+    }
+  });
+  res.json(user);
+});
+
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/hotels", hotelsRoutes);
 
@@ -69,6 +80,8 @@ app.use((req, res) => {
     });
 });
 
+
+
 app.use((err, req, res, next) => {
     console.error("[Server Error]:", err.stack);
 
@@ -78,7 +91,9 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = process.env.PORT || 3010;
+
+
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`[LazyVacay Server] 🛡️ Secured Fort running on port ${PORT}`);
 });

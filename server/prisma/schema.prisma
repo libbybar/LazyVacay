@@ -3,11 +3,11 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -16,23 +16,38 @@ enum Role {
   ADMIN
 }
 
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
 model User {
   id           String        @id @default(uuid())
   email        String        @unique
   password     String
   role         Role          @default(USER)
+  firstName    String
+  lastName     String?
+  phoneNumber  String?
   createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   reservations Reservation[]
 }
 
 model Hotel {
-  id            String @id @default(uuid())
-  name          String
-  country       String
-  city          String
-  numberOfRooms Int
-  stars         Int
-  rooms         Room[]
+  id           String        @id @default(uuid())
+  name         String @unique
+  country      String
+  city         String
+  stars        Int
+  description  String?
+  imageUrl     String?
+  rooms        Room[]
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  isDeleted    Boolean       @default(false)
 }
 
 model Room {
@@ -43,16 +58,27 @@ model Room {
   price        Float
   hotelId      String
   hotel        Hotel         @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  description  String?
+  imageUrl     String?
   reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  isDeleted    Boolean       @default(false)
 }
 
 model Reservation {
-  id        String   @id @default(uuid())
+  id        String            @id @default(uuid())
+  bookingNumber Int      @default(autoincrement())
   startDate DateTime
   endDate   DateTime
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User              @relation(fields: [userId], references: [id])
   roomId    String
-  room      Room     @relation(fields: [roomId], references: [id])
-  createdAt DateTime @default(now())
+  room      Room              @relation(fields: [roomId], references: [id])
+  hotelId   String
+  hotel     Hotel             @relation(fields: [hotelId], references: [id])
+  price     Float // Will be handled by server logic, saved as final price
+  status    ReservationStatus @default(CONFIRMED)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
