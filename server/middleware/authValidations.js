@@ -1,36 +1,48 @@
 import { ERROR_CODES } from "../constants/errorCodes.js";
+import { ApiError } from "./ApiError.js";
 
-const APPROVED_DOMAINS_REGEX = /^[^\s@]+@(gmail|hotmail|yahoo|walla|outlook|icloud)\.[a-z]{2,}$/i;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+// TODO: Extract advanced email verification (DNS lookup) to a separate microservice/worker in the future. Basic regex is sufficient for MVP scope.
 
 export const validateRegisterInput = (req, res, next) => {
   const { email, password, firstName, lastName } = req.body;
 
   if (!email || !password || !firstName) {
-    return res.status(400).json({
-      error: ERROR_CODES.MISSING_REQUIRED_FIELDS,
-      devMessage: "Email, password, and firstName are all required fields."
-    });
+    return next(new ApiError(
+      400,
+      ERROR_CODES.MISSING_REQUIRED_FIELDS,
+      "Email, password, and firstName are all required fields."));
   }
 
   if (firstName.trim().length < 2) {
-    return res.status(400).json({
-      error: ERROR_CODES.INVALID_USER_INPUT, 
-      devMessage: "First name must be at least 2 characters long."
-    });
+    return next(new ApiError(
+      400,
+      ERROR_CODES.INVALID_USER_INPUT,
+      "First name must be at least 2 characters long."));
   }
 
-  if (!APPROVED_DOMAINS_REGEX.test(email.trim())) {
-    return res.status(400).json({
-      error: ERROR_CODES.INVALID_EMAIL_FORMAT,
-      devMessage: "Please provide a valid email address from a recognized provider (e.g., Gmail, Hotmail, Walla, Yahoo, Outlook)."
-    });
+  if (!EMAIL_REGEX.test(email.trim())) {
+    return next(new ApiError(
+      400,
+      ERROR_CODES.INVALID_EMAIL_FORMAT,
+      "Invalid email format."
+    ));
   }
 
   if (password.length < 6) {
-    return res.status(400).json({
-      error: ERROR_CODES.WEAK_PASSWORD,
-      devMessage: "Password must be at least 6 characters long."
-    });
+    return next(new ApiError(
+      400,
+      ERROR_CODES.WEAK_PASSWORD,
+      "Password must be at least 6 characters long."
+    ));
+  }
+
+  if (lastName && typeof lastName === 'string' && lastName.trim().length < 2) {
+     return next(new ApiError(
+       400,
+       ERROR_CODES.INVALID_USER_INPUT,
+       "Last name must be at least 2 characters long."
+     ));
   }
 
   next(); 

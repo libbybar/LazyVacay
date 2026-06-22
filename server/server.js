@@ -7,10 +7,12 @@ import { rateLimit } from "express-rate-limit";
 import { ERROR_CODES } from "./constants/errorCodes.js";
 import authRoutes from "./routes/authRoutes.js";
 import hotelsRoutes from "./routes/hotelsRoutes.js";
+import { ApiError } from "./middleware/ApiError.js";
 
 dotenv.config();
 
 const app = express();
+
 const isDevelopment = process.env.NODE_ENV === "development";
 
 const allowedOrigins = [
@@ -20,7 +22,6 @@ const allowedOrigins = [
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
-
 
         if (isDevelopment && origin.startsWith("http://localhost:")) {
             return callback(null, true);
@@ -36,14 +37,18 @@ app.use(cors({
 
 app.use(helmet());
 app.use(express.json());
+
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 200,
   standardHeaders: "draft-6",
   legacyHeaders: false,
-  message: {
-    error: ERROR_CODES.TOO_MANY_REQUESTS,
-    devMessage: "Too many requests from this IP, please try again later."
+  handler: (req, res, next) => {
+    next(new ApiError(
+      429,
+      ERROR_CODES.TOO_MANY_REQUESTS,
+      "Too many requests from this IP, please try again later."
+    ));
   }
 });
 
@@ -54,44 +59,48 @@ const authLimiter = rateLimit({
   limit: 10,
   standardHeaders: "draft-6",
   legacyHeaders: false,
-  message: {
-    error: ERROR_CODES.TOO_MANY_AUTH_ATTEMPTS,
-    devMessage: "Too many auth attempts. Brute force protection activated."
+  handler: (req, res, next) => {
+    next(new ApiError(
+      429,
+      ERROR_CODES.TOO_MANY_AUTH_ATTEMPTS,
+      "Too many auth attempts. Brute force protection activated."
+    ));
   }
-});
-
-app.post("/api/test-user", async (req, res) => {
-  const user = await prisma.user.create({
-    data: {
-      email: "testuser@gmail.com",
-      password: "password123"
-    }
-  });
-  res.json(user);
 });
 
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/hotels", hotelsRoutes);
 
-app.use((req, res) => {
-    res.status(404).json({
-        error: ERROR_CODES.ENDPOINT_NOT_FOUND,
-        devMessage: isDevelopment ? `Path ${req.url} not found.` : "The requested resource was not found."
-    });
+app.use((req, res, next) => {
+    next(new ApiError(
+      404,
+      ERROR_CODES.ENDPOINT_NOT_FOUND,
+      `Path ${req.url} not found.`
+    ));
 });
-
-
 
 app.use((err, req, res, next) => {
-    console.error("[Server Error]:", err.stack);
+  console.error("[Server Error]:", err.message || err);
 
-    res.status(500).json({
-        error: ERROR_CODES.INTERNAL_SERVER_ERROR,
-        devMessage: isDevelopment ? err.message : "An unexpected server error occurred."
-    });
+  let statusCode = 500;
+  let response = {
+    error: ERROR_CODES.INTERNAL_SERVER_ERROR
+  };
+
+  if (err instanceof ApiError) {
+    statusCode = err.statusCode;
+    response.error = err.errorCode;
+    
+    if (isDevelopment) {
+      response.devMessage = err.devMessage;
+    }
+  } 
+  else if (isDevelopment) {
+    response.devMessage = err.message || "An unexpected server error occurred.";
+  }
+
+  res.status(statusCode).json(response);
 });
-
-
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
