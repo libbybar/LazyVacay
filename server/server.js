@@ -7,6 +7,7 @@ import { rateLimit } from "express-rate-limit";
 import { ERROR_CODES } from "./constants/errorCodes.js";
 import authRoutes from "./routes/authRoutes.js";
 import hotelsRoutes from "./routes/hotelsRoutes.js";
+import reservationsRoutes from "./routes/reservationsRoutes.js";
 import { ApiError } from "./middleware/ApiError.js";
 
 dotenv.config();
@@ -16,23 +17,23 @@ const app = express();
 const isDevelopment = process.env.NODE_ENV === "development";
 
 const allowedOrigins = [
-    process.env.FRONTEND_URL // TODO: Add the frontend URL after deploying the client application
+  process.env.FRONTEND_URL // TODO: Add the frontend URL after deploying the client application
 ];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
 
-        if (isDevelopment && origin.startsWith("http://localhost:")) {
-            return callback(null, true);
-        }
-
-        if (allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
-
-        return callback(new Error("Not allowed by CORS"));
+    if (isDevelopment && origin.startsWith("http://localhost:")) {
+      return callback(null, true);
     }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  }
 }));
 
 app.use(helmet());
@@ -70,13 +71,14 @@ const authLimiter = rateLimit({
 
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/hotels", hotelsRoutes);
+app.use("/api/reservations", reservationsRoutes);
 
 app.use((req, res, next) => {
-    next(new ApiError(
-      404,
-      ERROR_CODES.ENDPOINT_NOT_FOUND,
-      `Path ${req.url} not found.`
-    ));
+  next(new ApiError(
+    404,
+    ERROR_CODES.ENDPOINT_NOT_FOUND,
+    `Path ${req.url} not found.`
+  ));
 });
 
 app.use((err, req, res, next) => {
@@ -90,12 +92,11 @@ app.use((err, req, res, next) => {
   if (err instanceof ApiError) {
     statusCode = err.statusCode;
     response.error = err.errorCode;
-    
+
     if (isDevelopment) {
       response.devMessage = err.devMessage;
     }
-  } 
-  else if (isDevelopment) {
+  } else if (isDevelopment) {
     response.devMessage = err.message || "An unexpected server error occurred.";
   }
 
@@ -103,6 +104,7 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 8000;
+
 app.listen(PORT, () => {
-    console.log(`[LazyVacay Server] 🛡️ Secured Fort running on port ${PORT}`);
+  console.log(`[LazyVacay Server] 🛡️ Secured Fort running on port ${PORT}`);
 });

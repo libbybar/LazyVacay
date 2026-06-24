@@ -23,23 +23,23 @@ enum ReservationStatus {
 }
 
 model User {
-  id           String        @id @default(uuid())
-  email        String        @unique
-  password     String
-  role         Role          @default(USER)
-  firstName    String
-  lastName     String?
-  phoneNumber  String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-   isActive     Boolean       @default(true)
-   deactivatedAt DateTime?
-  reservations Reservation[]
+  id            String        @id @default(uuid())
+  email         String        @unique
+  password      String
+  role          Role          @default(USER)
+  firstName     String
+  lastName      String
+  phoneNumber   String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  isActive      Boolean       @default(true)
+  deactivatedAt DateTime?
+  reservations  Reservation[]
 }
 
 model Hotel {
   id           String        @id @default(uuid())
-  name         String @unique
+  name         String        @unique
   country      String
   city         String
   stars        Int
@@ -48,7 +48,7 @@ model Hotel {
   rooms        Room[]
   reservations Reservation[]
   createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  updatedAt    DateTime      @default(now())
   isDeleted    Boolean       @default(false)
 }
 
@@ -56,31 +56,31 @@ model Room {
   id           String        @id @default(uuid())
   name         String
   size         Float
-  maxGuests    Int
+  maxGuests    Int //לבדוק אם יש רק חיובי שלם
   price        Float
-  hotelId      String
+  hotelId      String 
   hotel        Hotel         @relation(fields: [hotelId], references: [id], onDelete: Cascade)
   description  String?
   imageUrl     String?
   reservations Reservation[]
   createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  updatedAt    DateTime      @default(now())
   isDeleted    Boolean       @default(false)
 }
 
 model Reservation {
-  id        String            @id @default(uuid())
-  bookingNumber Int      @default(autoincrement())
-  startDate DateTime
-  endDate   DateTime
-  userId    String
-  user      User              @relation(fields: [userId], references: [id])
-  roomId    String
-  room      Room              @relation(fields: [roomId], references: [id])
-  hotelId   String
-  hotel     Hotel             @relation(fields: [hotelId], references: [id])
-  price     Float // Will be handled by server logic, saved as final price
-  status    ReservationStatus @default(CONFIRMED)
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  id            String            @id @default(uuid())
+  bookingNumber Int               @default(autoincrement())
+  startDate     DateTime
+  endDate       DateTime
+  userId        String
+  user          User              @relation(fields: [userId], references: [id])
+  roomId        String
+  room          Room              @relation(fields: [roomId], references: [id])
+  hotelId       String
+  hotel         Hotel             @relation(fields: [hotelId], references: [id])
+  price         Float
+  status        ReservationStatus @default(CONFIRMED)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @default(now())
 }

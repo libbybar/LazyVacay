@@ -2,16 +2,17 @@ import { ERROR_CODES } from "../constants/errorCodes.js";
 import { ApiError } from "./ApiError.js";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-// TODO: Extract advanced email verification (DNS lookup) to a separate microservice/worker in the future. Basic regex is sufficient for MVP scope.
+// TODO: Extract advanced email verification (DNS lookup) to a separate microservice/worker in the future.
+// Basic regex is sufficient for MVP scope.
 
 export const validateRegisterInput = (req, res, next) => {
   const { email, password, firstName, lastName } = req.body;
 
-  if (!email || !password || !firstName) {
+  if (!email || !password || !firstName || !lastName) {
     return next(new ApiError(
       400,
       ERROR_CODES.MISSING_REQUIRED_FIELDS,
-      "Email, password, and firstName are all required fields."));
+      "Email, password, firstName and lastName are all required fields."));
   }
 
   if (firstName.trim().length < 2) {

@@ -17,63 +17,88 @@ router.get("/", requireAuth, async (req, res, next) => {
   }
 });
 
-router.get("/available_rooms", requireAuth, async (req, res, next) => { 
-  try { 
+router.get("/available_rooms", requireAuth, async (req, res, next) => {
+  try {
     const { start_date, end_date, hotelId } = req.query;
 
     const start = new Date(start_date);
     const end = new Date(end_date);
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-      return res.status(400).json({ error: ERROR_CODES.INVALID_DATE_FORMAT, devMessage: "Invalid date format provided." });
+      return res.status(400).json({
+        error: ERROR_CODES.INVALID_DATE_FORMAT,
+        devMessage: "Invalid date format provided.",
+      });
+    }
+
+    if (end <= start) {
+      return res.status(400).json({
+        error: ERROR_CODES.END_DATE_BEFORE_START_DATE,
+        devMessage: "End date must be after start date.",
+      });
+    }
+
+    const roomFilters = {
+      isDeleted: false,
+      reservations: {
+        none: {
+          AND: [
+            { status: { not: "CANCELLED" } },
+            { startDate: { lt: end } },
+            { endDate: { gt: start } },
+          ],
+        },
+      },
+    };
+
+   
+    if (hotelId) {
+      roomFilters.hotelId = hotelId;
     }
 
     const availableRooms = await prisma.room.findMany({
-      where: {
-        hotelId: hotelId,
-        isDeleted: false,
-        reservations: {
-          none: {
-            AND: [
-                { status: { not: "CANCELLED" } },
-              { startDate: { lt: end } },
-              { endDate: { gt: start } }
-            ]
-          }
-        }
-      }
+      where: roomFilters,
+      include: {
+        hotel: true,
+      },
     });
 
     if (availableRooms.length === 0) {
-      return res.status(200).json([]); 
+      return res.status(200).json([]);
     }
 
-    const formattedRooms = availableRooms.map(room => ({
+    const formattedRooms = availableRooms.map((room) => ({
       id: room.id,
       name: room.name,
       max_guests: room.maxGuests,
       price: room.price,
       size: room.size,
-      hotel: room.hotelId
+      hotel: room.hotel,
     }));
 
     res.status(200).json(formattedRooms);
-
-  } catch (error) { 
-    next(error); 
-  } 
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get("/room/:roomId", requireAuth, async (req, res, next) => {
+router.get("/rooms/:roomId", requireAuth, async (req, res, next) => {
   try {
     const { roomId } = req.params;
+
     const room = await prisma.room.findUnique({
       where: { id: roomId },
-      include: { hotel: true }
+      include: { hotel: true },
     });
 
     if (!room) {
-      return next(new ApiError(404, ERROR_CODES.RESOURCE_NOT_FOUND, `Room with ID ${roomId} not found`));
+      return next(
+        new ApiError(
+          404,
+          ERROR_CODES.RESOURCE_NOT_FOUND,
+          `Room with ID ${roomId} not found`
+        )
+      );
     }
 
     res.json(room);
@@ -93,8 +118,8 @@ router.post("/", requireAuth, requireAdmin, validateHotelInput, async (req, res,
         city: city.trim(),
         stars,
         description: description ? description.trim() : null,
-        imageUrl: imageUrl ? imageUrl.trim() : null
-      }
+        imageUrl: imageUrl ? imageUrl.trim() : null,
+      },
     });
 
     res.status(201).json(newHotel);
@@ -112,14 +137,27 @@ router.post("/", requireAuth, requireAdmin, validateHotelInput, async (req, res,
     next(error);
   }
 });
+
 router.post("/rooms", requireAuth, requireAdmin, validateRoomInput, async (req, res, next) => {
   try {
     const { name, size, maxGuests, price, hotelId, description, imageUrl } = req.body;
+
     const newRoom = await prisma.room.create({
-      data: { name, size, maxGuests, price, hotelId, description, imageUrl }
+      data: {
+        name,
+        size,
+        maxGuests,
+        price,
+        hotelId,
+        description,
+        imageUrl,
+      },
     });
+
     res.status(201).json(newRoom);
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/reserve", requireAuth, validateReservation, async (req, res, next) => {
@@ -129,44 +167,62 @@ router.post("/reserve", requireAuth, validateReservation, async (req, res, next)
     const { start, end } = req.validatedDates;
 
     const room = await prisma.room.findUnique({
-      where: { id: roomId }
+      where: { id: roomId },
     });
 
     if (!room) {
-      return next(new ApiError(404, ERROR_CODES.RESOURCE_NOT_FOUND, `Room with ID ${roomId} not found.`));
+      return next(
+        new ApiError(
+          404,
+          ERROR_CODES.RESOURCE_NOT_FOUND,
+          `Room with ID ${roomId} not found.`
+        )
+      );
     }
 
     if (room.hotelId !== hotelId) {
-      return next(new ApiError(400, ERROR_CODES.INVALID_ROOM_HOTEL_MATCH, "The room does not exist in the hotel. No reservation made !!"));
+      return next(
+        new ApiError(
+          400,
+          ERROR_CODES.INVALID_ROOM_HOTEL_MATCH,
+          "The room does not exist in the hotel. No reservation made !!"
+        )
+      );
     }
 
     const conflictingReservation = await prisma.reservation.findFirst({
       where: {
         roomId,
-        status: { not: "CANCELLED" }, 
+        status: { not: "CANCELLED" },
         startDate: { lt: end },
-        endDate: { gt: start }
-      }
+        endDate: { gt: start },
+      },
     });
 
     if (conflictingReservation) {
-      return next(new ApiError(400, ERROR_CODES.ROOM_ALREADY_BOOKED, "The room is already reserved for the requested dates."));
+      return next(
+        new ApiError(
+          400,
+          ERROR_CODES.ROOM_ALREADY_BOOKED,
+          "The room is already reserved for the requested dates."
+        )
+      );
     }
 
     const diffTime = Math.abs(end - start);
     const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    const calculatedFinalPrice = (nights * room.price) * 1.18;
+
+    const calculatedFinalPrice = nights * room.price * 1.18;
 
     const newReservation = await prisma.reservation.create({
       data: {
         roomId,
-        hotelId, 
+        hotelId,
         userId,
         startDate: start,
         endDate: end,
-        price: calculatedFinalPrice 
-      }
+        price: calculatedFinalPrice,
+      },
     });
 
     res.status(201).json({
@@ -175,8 +231,8 @@ router.post("/reserve", requireAuth, validateReservation, async (req, res, next)
       details: {
         nights,
         pricePerNight: room.price,
-        finalPriceIncludingVAT: calculatedFinalPrice
-      }
+        finalPriceIncludingVAT: calculatedFinalPrice,
+      },
     });
   } catch (error) {
     next(error);
@@ -186,30 +242,42 @@ router.post("/reserve", requireAuth, validateReservation, async (req, res, next)
 router.patch("/reserve/:id/cancel", requireAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
-    const userId = req.user.userId; 
+    const userId = req.user.userId;
 
     const reservation = await prisma.reservation.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!reservation) {
-      return next(new ApiError(404, ERROR_CODES.RESOURCE_NOT_FOUND, "Reservation not found."));
+      return next(
+        new ApiError(
+          404,
+          ERROR_CODES.RESOURCE_NOT_FOUND,
+          "Reservation not found."
+        )
+      );
     }
 
     if (reservation.userId !== userId) {
-      return next(new ApiError(403, ERROR_CODES.UNAUTHORIZED, "You do not have permission to cancel this reservation."));
+      return next(
+        new ApiError(
+          403,
+          ERROR_CODES.UNAUTHORIZED,
+          "You do not have permission to cancel this reservation."
+        )
+      );
     }
 
     const cancelledReservation = await prisma.reservation.update({
       where: { id },
       data: {
-        status: "CANCELLED"
-      }
+        status: "CANCELLED",
+      },
     });
 
     res.json({
       message: "Reservation cancelled successfully",
-      reservation: cancelledReservation
+      reservation: cancelledReservation,
     });
   } catch (error) {
     next(error);
@@ -219,13 +287,20 @@ router.patch("/reserve/:id/cancel", requireAuth, async (req, res, next) => {
 router.get("/:id", requireAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
+
     const hotel = await prisma.hotel.findUnique({
       where: { id },
-      include: { rooms: true } 
+      include: { rooms: true },
     });
 
     if (!hotel) {
-      return next(new ApiError(404, ERROR_CODES.RESOURCE_NOT_FOUND, `Hotel with ID ${id} not found`));
+      return next(
+        new ApiError(
+          404,
+          ERROR_CODES.RESOURCE_NOT_FOUND,
+          `Hotel with ID ${id} not found`
+        )
+      );
     }
 
     res.json(hotel);
