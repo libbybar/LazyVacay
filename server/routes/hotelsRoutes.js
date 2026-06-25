@@ -10,8 +10,11 @@ const router = Router();
 
 router.get("/", requireAuth, async (req, res, next) => {
   try {
-    const hotels = await prisma.hotel.findMany();
-    res.json(hotels);
+const hotels = await prisma.hotel.findMany({
+  where: {
+    isDeleted: false,
+  },
+});    res.json(hotels);
   } catch (error) {
     next(error);
   }
@@ -284,14 +287,154 @@ router.patch("/reserve/:id/cancel", requireAuth, async (req, res, next) => {
   }
 });
 
+router.patch("/:id", requireAuth, requireAdmin, validateHotelInput, async (req, res, next) => { 
+  try {
+    const { id } = req.params;
+    const { name, country, city, stars, description, imageUrl } = req.body;
+
+    const updatedHotel = await prisma.hotel.update({
+      where: { id },
+      data: {
+        name: name.trim(),
+        country: country.trim(),
+        city: city.trim(),
+        stars,
+        description: description ? description.trim() : null,
+        imageUrl: imageUrl ? imageUrl.trim() : null,
+      },
+    });
+
+    res.json(updatedHotel);
+  } catch (error) {
+    if (error.code === "P2025") {
+      return next(
+        new ApiError(
+          404,
+          ERROR_CODES.RESOURCE_NOT_FOUND,
+          "Hotel not found."
+        )
+      );
+    }
+
+    if (error.code === "P2002" && error.meta?.target?.includes("name")) {
+      return next(
+        new ApiError(
+          400,
+          ERROR_CODES.HOTEL_ALREADY_EXISTS,
+          "Hotel with this name already exists."
+        )
+      );
+    }
+
+    next(error);
+  }
+});
+
+router.patch("/:id/delete", requireAuth, requireAdmin, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const deletedHotel = await prisma.hotel.update({
+      where: { id },
+      data: {
+        isDeleted: true,
+      },
+    });
+
+    res.json(deletedHotel);
+  } catch (error) {
+    if (error.code === "P2025") {
+      return next(
+        new ApiError(
+          404,
+          ERROR_CODES.RESOURCE_NOT_FOUND,
+          "Hotel not found."
+        )
+      );
+    }
+
+    next(error);
+  }
+});
+
+router.patch("/rooms/:roomId", requireAuth, requireAdmin, validateRoomInput, async (req, res, next) => {
+  try {
+    const { roomId } = req.params;
+    const { name, size, maxGuests, price, hotelId, description, imageUrl } = req.body;
+
+    const updatedRoom = await prisma.room.update({
+      where: { id: roomId },
+      data: {
+        name: name.trim(),
+        size,
+        maxGuests,
+        price,
+        hotelId,
+        description: description ? description.trim() : null,
+        imageUrl: imageUrl ? imageUrl.trim() : null,
+      },
+    });
+
+    res.json(updatedRoom);
+  } catch (error) {
+    if (error.code === "P2025") {
+      return next(
+        new ApiError(
+          404,
+          ERROR_CODES.RESOURCE_NOT_FOUND,
+          "Room not found."
+        )
+      );
+    }
+
+    next(error);
+  }
+});
+
+router.patch("/rooms/:roomId/delete", requireAuth, requireAdmin, async (req, res, next) => {
+  try {
+    const { roomId } = req.params;
+
+    const deletedRoom = await prisma.room.update({
+      where: { id: roomId },
+      data: {
+        isDeleted: true,
+      },
+    });
+
+    res.json(deletedRoom);
+  } catch (error) {
+    if (error.code === "P2025") {
+      return next(
+        new ApiError(
+          404,
+          ERROR_CODES.RESOURCE_NOT_FOUND,
+          "Room not found."
+        )
+      );
+    }
+
+    next(error);
+  }
+});
+
 router.get("/:id", requireAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const hotel = await prisma.hotel.findUnique({
-      where: { id },
-      include: { rooms: true },
-    });
+ const hotel = await prisma.hotel.findFirst({
+  where: {
+    id,
+    isDeleted: false,
+  },
+  include: {
+    rooms: {
+      where: {
+        isDeleted: false,
+      },
+    },
+  },
+});
 
     if (!hotel) {
       return next(

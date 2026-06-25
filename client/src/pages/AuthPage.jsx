@@ -42,12 +42,16 @@ const AuthPage = () => {
           email: formData.email,
           password: formData.password,
         });
-      
+
         localStorage.setItem("token", result.token);
 
         setSuccessMessage(UI_TEXT.LOGIN_SUCCESS);
         setTimeout(() => {
-          navigate("/hotels");
+          if (result.user.role === "ADMIN") {
+            navigate("/admin");
+          } else {
+            navigate("/hotels");
+          }
         }, 1000);
 
       } else {
