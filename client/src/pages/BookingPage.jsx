@@ -1,25 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
+import { formatCurrency } from "../utils/formatCurrency";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
+import { BackButton, ActionButton, SecondaryButton, SignatureButton, PageTitle, MessageText, ErrorText, InputGroup, Label, Input, DetailCard, ModalOverlay } from "../styles/SharedUI";
+
 import {
   Container,
-  BackButton,
-  BookingCard,
-  PageTitle,
   RoomName,
   DetailText,
   Form,
-  InputGroup,
-  Label,
-  Input,
   PriceBox,
-  ActionButton,
-  SecondaryButton,
-  MessageText,
-  ModalOverlay,
   ModalCard,
   ModalTitle,
   ModalSubtitle,
@@ -36,6 +29,7 @@ const BookingPage = () => {
   const [formData, setFormData] = useState({
     startDate: "",
     endDate: "",
+    guests: "1",
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -117,6 +111,21 @@ const BookingPage = () => {
       return;
     }
 
+    if (!formData.guests) {
+      setError(ERROR_MESSAGES.MISSING_REQUIRED_FIELDS);
+      return;
+    }
+
+    if (Number(formData.guests) < 1) {
+      setError(ERROR_MESSAGES.INVALID_USER_INPUT);
+      return;
+    }
+
+    if (Number(formData.guests) > room.maxGuests) {
+      setError(ERROR_MESSAGES.TOO_MANY_GUESTS);
+      return;
+    }
+
     setError("");
     setIsReviewModalOpen(true);
   };
@@ -133,6 +142,7 @@ const BookingPage = () => {
           hotelId: room.hotelId,
           startDate: formData.startDate,
           endDate: formData.endDate,
+          guests: Number(formData.guests),
         }),
       });
 
@@ -150,7 +160,7 @@ const BookingPage = () => {
   }
 
   if (!room && error) {
-    return <MessageText>{error}</MessageText>;
+    return <ErrorText>{error}</ErrorText>;
   }
 
   if (!room) {
@@ -163,7 +173,7 @@ const BookingPage = () => {
         {UI_TEXT.BACK}
       </BackButton>
 
-      <BookingCard>
+      <DetailCard>
         <PageTitle>{UI_TEXT.RESERVATION_DETAILS}</PageTitle>
 
         <RoomName>{room.name}</RoomName>
@@ -171,7 +181,7 @@ const BookingPage = () => {
         {room.hotel?.name && <DetailText>{room.hotel.name}</DetailText>}
 
         <DetailText>
-          {UI_TEXT.PRICE_PER_NIGHT}: ₪{room.price}
+          {UI_TEXT.PRICE_PER_NIGHT}: {formatCurrency(room.price)}
         </DetailText>
 
         <Form onSubmit={handleSubmit}>
@@ -199,23 +209,36 @@ const BookingPage = () => {
             />
           </InputGroup>
 
+          <InputGroup>
+            <Label htmlFor="guests">{UI_TEXT.ACCOMMODATION_CAPACITY_LABEL}</Label>
+            <Input
+              type="number"
+              id="guests"
+              min="1"
+              max={room.maxGuests}
+              value={formData.guests}
+              onChange={handleChange}
+              required
+            />
+          </InputGroup>
+
           <PriceBox>
             <DetailText>
               {UI_TEXT.NIGHTS}: {nights}
             </DetailText>
 
             <DetailText>
-              {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: ₪{finalPrice.toFixed(2)}
+              {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: {formatCurrency(finalPrice)}
             </DetailText>
           </PriceBox>
 
-          {error && <MessageText>{error}</MessageText>}
+          {error && <ErrorText>{error}</ErrorText>}
 
           <ActionButton type="submit" disabled={isSubmitting}>
             {UI_TEXT.CONFIRM_BOOKING}
           </ActionButton>
         </Form>
-      </BookingCard>
+      </DetailCard>
 
       {isReviewModalOpen && (
         <ModalOverlay>
@@ -242,7 +265,11 @@ const BookingPage = () => {
               </DetailText>
 
               <DetailText>
-                {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: ₪{finalPrice.toFixed(2)}
+                {UI_TEXT.ACCOMMODATION_CAPACITY_LABEL}: {formData.guests}
+              </DetailText>
+
+              <DetailText>
+                {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: {formatCurrency(finalPrice)}
               </DetailText>
             </ModalDetails>
 
@@ -255,13 +282,13 @@ const BookingPage = () => {
                 {UI_TEXT.BACK_TO_EDITING}
               </SecondaryButton>
 
-              <ActionButton
+              <SignatureButton
                 type="button"
                 onClick={handleFinalConfirm}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? UI_TEXT.LOADING : UI_TEXT.BOOKING_REVIEW_FINAL_CONFIRM}
-              </ActionButton>
+              </SignatureButton>
             </ModalActions>
           </ModalCard>
         </ModalOverlay>

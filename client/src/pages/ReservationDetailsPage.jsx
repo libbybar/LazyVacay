@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
+import { formatCurrency } from "../utils/formatCurrency";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
+import { PageTitle, MessageText, ErrorText, DetailCard } from "../styles/SharedUI";
+
 import {
   Container,
-  ConfirmationCard,
-  PageTitle,
   UserBlock,
   UserName,
   UserEmail,
@@ -15,7 +16,6 @@ import {
   DetailText,
   PriceText,
   ActionButton,
-  MessageText,
 } from "../styles/ReservationDetailsPageStyle";
 
 const ReservationDetailsPage = () => {
@@ -50,7 +50,7 @@ const ReservationDetailsPage = () => {
   }
 
   if (error) {
-    return <MessageText>{error}</MessageText>;
+    return <ErrorText>{error}</ErrorText>;
   }
 
   if (!reservation) {
@@ -59,7 +59,7 @@ const ReservationDetailsPage = () => {
 
   return (
     <Container>
-      <ConfirmationCard>
+      <DetailCard>
         <PageTitle>{UI_TEXT.RESERVATION_CONFIRMED}</PageTitle>
 
         <UserBlock>
@@ -84,14 +84,14 @@ const ReservationDetailsPage = () => {
           </DetailText>
 
           <PriceText>
-            {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: ₪{reservation.price.toFixed(2)}
+            {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: {formatCurrency(reservation.price)}
           </PriceText>
         </DetailsBlock>
 
         <ActionButton onClick={() => navigate("/hotels")}>
           {UI_TEXT.BACK_TO_HOTELS}
         </ActionButton>
-      </ConfirmationCard>
+      </DetailCard>
     </Container>
   );
 };

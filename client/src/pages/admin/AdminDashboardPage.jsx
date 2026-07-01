@@ -4,16 +4,12 @@ import { apiClient } from "../../api/apiClient";
 import { UI_TEXT } from "../../constants/uiText";
 import { ERROR_MESSAGES } from "../../constants/errorMessages";
 
+import { BackButton, ActionButton, Container, PageTitle, MessageText, ErrorText, SectionTitle } from "../../styles/SharedUI";
+
 import {
-  Container,
-  BackButton,
-  PageTitle,
   DashboardGrid,
   DashboardCard,
-  CardTitle,
   CardText,
-  ActionButton,
-  MessageText,
 } from "../../styles/AdminDashboardPageStyle";
 
 const AdminDashboardPage = () => {
@@ -67,7 +63,7 @@ const AdminDashboardPage = () => {
   if (!isAllowed) {
     return (
       <Container>
-        <MessageText>{error}</MessageText>
+        <ErrorText>{error}</ErrorText>
 
         <ActionButton type="button" onClick={() => navigate("/hotels")}>
           {UI_TEXT.BACK_TO_HOTELS}
@@ -87,7 +83,7 @@ const AdminDashboardPage = () => {
       <DashboardGrid>
         <DashboardCard>
           <div>
-            <CardTitle>{UI_TEXT.ADMIN_RESERVATIONS_TITLE}</CardTitle>
+            <SectionTitle>{UI_TEXT.ADMIN_RESERVATIONS_TITLE}</SectionTitle>
             <CardText>{UI_TEXT.ADMIN_RESERVATIONS_DESCRIPTION}</CardText>
           </div>
 
@@ -101,7 +97,7 @@ const AdminDashboardPage = () => {
 
         <DashboardCard>
           <div>
-            <CardTitle>{UI_TEXT.ADMIN_HOTELS_TITLE}</CardTitle>
+            <SectionTitle>{UI_TEXT.ADMIN_HOTELS_TITLE}</SectionTitle>
             <CardText>{UI_TEXT.ADMIN_HOTELS_DESCRIPTION}</CardText>
           </div>
 

@@ -73,9 +73,11 @@ router.get("/available_rooms", requireAuth, async (req, res, next) => {
     const formattedRooms = availableRooms.map((room) => ({
       id: room.id,
       name: room.name,
-      max_guests: room.maxGuests,
+      maxGuests: room.maxGuests,
       price: room.price,
       size: room.size,
+      description: room.description,
+      imageUrl: room.imageUrl,
       hotel: room.hotel,
     }));
 

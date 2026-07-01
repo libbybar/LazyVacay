@@ -1,38 +1,12 @@
 import styled from "styled-components";
+import { StampCard } from './SharedUI';
 
-export const Container = styled.div`
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  direction: rtl;
-`;
-
-export const TopBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-  }
-`;
-
-export const PageTitle = styled.h1`
+export const SearchCard = styled(StampCard)`
+  padding: 2.5rem 3rem; 
+  margin-bottom: 3rem; 
   text-align: center;
-  color: ${(props) => props.theme.colors.primary};
-  margin-bottom: 2rem;
 `;
-
-export const SearchCard = styled.section`
-  background-color: ${(props) => props.theme.colors.cardBg};
-  border: ${(props) => props.theme.borders.atlas};
-  border-radius: 6px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-`;
-
+  
 export const SearchTitle = styled.h2`
   color: ${(props) => props.theme.colors.primary};
   margin-bottom: 0.5rem;
@@ -49,44 +23,10 @@ export const SearchForm = styled.form`
   align-items: end;
 `;
 
-export const InputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-export const Label = styled.label`
-  font-weight: bold;
-`;
-
-export const Input = styled.input`
-  padding: 0.8rem;
-  border: 1px solid ${(props) => props.theme.colors.border};
-  border-radius: 4px;
-  font-family: ${(props) => props.theme.fonts.main};
-  font-size: 1rem;
-
-  &:focus {
-    outline: none;
-    border-color: ${(props) => props.theme.colors.primary};
-  }
-`;
-
 export const HotelsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
-`;
-
-export const HotelCard = styled.article`
-  background-color: ${(props) => props.theme.colors.cardBg};
-  border: ${(props) => props.theme.borders.atlas};
-  border-radius: 6px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 `;
 
 export const RoomDetail = styled.p`
@@ -94,50 +34,77 @@ export const RoomDetail = styled.p`
   line-height: 1.5;
 `;
 
-export const ActionButton = styled.button`
-  background-color: ${(props) => props.theme.colors.primary};
-  color: white;
-  border: none;
-  padding: 0.8rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 1rem;
-  font-family: ${(props) => props.theme.fonts.main};
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${(props) => props.theme.accent};
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-`;
-
-export const SecondaryButton = styled.button`
-  background-color: transparent;
-  color: ${(props) => props.theme.colors.primary};
-  border: 1px solid ${(props) => props.theme.colors.primary};
-  padding: 0.8rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 1rem;
-  font-family: ${(props) => props.theme.fonts.main};
-
-  &:hover {
-    color: ${(props) => props.theme.accent};
-    border-color: ${(props) => props.theme.accent};
-  }
-`;
-
-export const MessageText = styled.p`
+export const HeroSection = styled.section`
   text-align: center;
-  font-weight: bold;
-  color: ${(props) => props.theme.colors.error};
-  margin-bottom: 1.5rem;
+  padding: 4rem 1rem 3.5rem;
+  margin-bottom: 3rem;
+  border-radius: 12px;
+  position: relative;
+
+/* Background: Fine map grid lines on warm parchment gradient */
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px, transparent 39px,
+      rgba(44, 62, 80, 0.06) 39px, rgba(44, 62, 80, 0.06) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 39px,
+      rgba(44, 62, 80, 0.06) 39px, rgba(44, 62, 80, 0.06) 40px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(244, 236, 224, 0.55) 0%,
+      rgba(253, 251, 247, 0) 100%
+    );
+
+  border: 1px solid rgba(209, 199, 189, 0.7);
+  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.05), inset 0 0 80px rgba(244, 236, 224, 0.3);
+
+/* Inner frame — Atlas page effect */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border: 1px solid rgba(209, 199, 189, 0.45);
+    border-radius: 8px;
+    pointer-events: none;
+  }
+
+/* Mark center coordinates at the bottom */
+  &::after {
+    content: '✦';
+    position: absolute;
+    bottom: -0.65rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.85rem;
+    color: ${(props) => props.theme.colors.border};
+    background-color: ${(props) => props.theme.colors.background};
+    padding: 0 0.6rem;
+    font-family: ${(props) => props.theme.fonts.coords};
+    line-height: 1;
+  }
+`;
+
+export const MainHeadline = styled.h1`
+  font-family: ${(props) => props.theme.fonts.heading};
+  font-size: 3.5rem;
+  color: ${(props) => props.theme.colors.primary};
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+  text-shadow: 0 1px 3px rgba(26, 54, 93, 0.12);
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+`;
+
+export const SubHeadline = styled.p`
+  font-family: ${(props) => props.theme.fonts.main};
+  font-size: 1.25rem;
+  color: ${(props) => props.theme.colors.accent};
+  font-style: italic;
+  letter-spacing: 0.05em;
 `;

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../prismaClient.js";
 import { ERROR_CODES } from "../constants/errorCodes.js";
 import { ApiError } from "../middleware/ApiError.js";
-import { validateRegisterInput } from "../middleware/authValidations.js";
+import { validateRegisterInput, validateProfileUpdate } from "../middleware/authValidations.js";
 import { requireAuth } from "../middleware/authMiddleware.js";
 
 
@@ -187,6 +187,48 @@ router.get("/profile", requireAuth, async (req, res, next) => {
       },
       reservations: user.reservations,
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/profile", requireAuth, validateProfileUpdate, async (req, res, next) => {
+  try {
+    const { firstName, lastName, email, phoneNumber } = req.body;
+    const userId = req.user.userId;
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
+
+    if (existingUser && existingUser.id !== userId) {
+      return next(new ApiError(
+        409,
+        ERROR_CODES.EMAIL_ALREADY_EXISTS,
+        "This email is already in use by another account."
+      ));
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        firstName: firstName.trim(),
+        lastName: lastName ? lastName.trim() : null,
+        email: normalizedEmail,
+        phoneNumber: phoneNumber ? phoneNumber.trim() : null,
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        phoneNumber: true,
+        role: true,
+      },
+    });
+
+    res.json({ user: updatedUser });
   } catch (error) {
     next(error);
   }

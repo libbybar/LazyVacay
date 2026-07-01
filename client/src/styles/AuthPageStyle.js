@@ -1,46 +1,77 @@
 import styled from 'styled-components';
 
-
-// עוטף העמוד כולו - דואג למרכז את הכרטיסייה באמצע המסך
 export const PageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* תופס לפחות את כל גובה המסך */
-  /* צבע הרקע כבר מוגדר ב-GlobalStyle, לכן אין צורך להגדיר שוב */
+  min-height: 100vh;
+  padding: 2rem;
+  box-sizing: border-box;
+  align-items: flex-start;
+  padding-top: 6rem;
+  
+  
+  background-image: 
+  linear-gradient(rgba(249, 248, 246, 0), rgba(249, 248, 246, 0.85)),
+  url('/images/Sunset.png'); 
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 `;
 
-// כרטיסיית ההתחברות/הרשמה - ה"דף" באטלס שלנו
 export const AuthCard = styled.div`
-  background-color: ${props => props.theme.colors.cardBg}; /* רקע לבן/נקי לכרטיס */
-  border: ${props => props.theme.borders.atlas}; /* המסגרת העדינה של האטלס */
-  padding: 3rem 2rem;
+  background-color: ${props => props.theme.colors.cardBg};
   width: 100%;
-  max-width: 400px; /* לא נותנים לכרטיס להיות רחב מדי במסכים גדולים */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* צל עדין מאוד רק כדי להפריד מהרקע */
+  max-width: 400px;
   text-align: center;
+  
+  height: 580px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  /* הגדלנו את השוליים הפנימיים מ-2.5rem ל-3.5rem כדי לתת המון "אוויר" למעלה ולמטה */
+  padding: 3.5rem 2.5rem; 
+  border: 4px double ${props => props.theme.colors.border};
+  border-radius: 4px;
+  position: relative; 
+  box-shadow: 0 10px 30px rgba(44, 62, 80, 0.1); 
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10px; left: -10px; right: -10px; bottom: -10px;
+    border: 1px solid ${props => props.theme.colors.border};
+    border-radius: 6px;
+    z-index: -1;
+    background-color: ${props => props.theme.colors.cardBg}; 
+  }
 `;
 
-// כותרת הכרטיסייה
 export const Title = styled.h2`
   color: ${props => props.theme.colors.text};
-  margin-bottom: 2rem;
-  /* הפונט הקלאסי כבר מוגדר ב-GlobalStyle עבור תגיות h2 */
+  margin-bottom: 0.2rem; 
 `;
 
-// הטופס עצמו
+export const Subtitle = styled.p`
+  color: ${props => props.theme.accent}; 
+  font-family: ${props => props.theme.fonts.main};
+  font-style: italic; 
+  margin-bottom: 1.2rem; /* במקום 2rem קודם */
+  font-size: 1.05rem;
+`;
+
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.2rem; /* רווח אחיד בין כל השדות בטופס */
+  gap: 0.5rem; /* הקטנו משמעותית את הרווח בין כל שדה כדי לפנות מקום לשוליים */
 `;
 
-// קבוצה של תווית ושדה קלט (כדי לסדר אותם אחד מעל השני)
 export const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: right; /* יישור לימין לעברית */
-  gap: 0.5rem;
+  text-align: right; 
+  gap: 0.2rem; 
 `;
 
 export const Label = styled.label`
@@ -50,20 +81,20 @@ export const Label = styled.label`
 `;
 
 export const Input = styled.input`
-  padding: 0.8rem;
-  border: 1px solid ${props => props.theme.colors.border}; /* מסגרת עדינה לשדה */
-  border-radius: 4px; /* פינות טיפה עגולות למראה מודרני */
-  font-family: ${props => props.theme.fonts.main}; /* פונט מודרני מתוך ה-Theme */
+
+  padding: 0.6rem 0.8rem; 
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: 4px;
+  font-family: ${props => props.theme.fonts.main};
   font-size: 1rem;
   background-color: ${props => props.theme.colors.background};
   
   &:focus {
     outline: none;
-    border-color: ${props => props.theme.colors.primary}; /* הדגשה כחולה כשלוחצים על השדה */
+    border-color: ${props => props.theme.colors.primary};
   }
 `;
 
-// כפתור הפעולה המרכזי
 export const SubmitButton = styled.button`
   margin-top: 1rem;
   padding: 0.8rem;
@@ -77,11 +108,10 @@ export const SubmitButton = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: ${props => props.theme.colors.accent}; /* שינוי לצבע חותמת בעת מעבר עכבר */
+    background-color: ${props => props.theme.colors.accent};
   }
 `;
 
-// טקסט למעבר בין התחברות להרשמה (למשל: "אין חשבון? יצירת חשבון")
 export const ToggleModeText = styled.p`
   margin-top: 1.5rem;
   font-size: 0.9rem;

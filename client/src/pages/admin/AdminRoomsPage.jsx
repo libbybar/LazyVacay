@@ -7,15 +7,15 @@ import AdminEntityCard from "../../components/admin/AdminEntityCard";
 import RoomForm from "../../components/admin/RoomForm";
 import ConfirmModal from "../../components/ConfirmModal";
 
+import { PageTitle, MessageText, ErrorText } from "../../styles/SharedUI";
+
 import {
   Container,
   TopBar,
-  PageTitle,
   ManagementGrid,
   ActionButton,
   SecondaryButton,
   DeleteButton,
-  MessageText,
 } from "../../styles/AdminPagesStyle";
 
 const emptyRoomForm = {
@@ -305,7 +305,7 @@ const AdminRoomsPage = () => {
         </>
       )}
 
-      {error && <MessageText>{error}</MessageText>}
+      {error && <ErrorText>{error}</ErrorText>}
 
       {!error && rooms.length === 0 && (
         <MessageText>{UI_TEXT.NO_ROOMS_IN_HOTEL}</MessageText>

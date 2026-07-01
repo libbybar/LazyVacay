@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { PageTransition } from "./styles/SharedUI";
 import AuthPage from "./pages/AuthPage";
 import HotelsPage from "./pages/HotelsPage";
 import HotelDetailsPage from "./pages/HotelDetailsPage";
@@ -9,10 +10,14 @@ import ProfilePage from "./pages/ProfilePage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminHotelsPage from "./pages/admin/AdminHotelsPage";
 import AdminRoomsPage from "./pages/admin/AdminRoomsPage";
+import AdminReservationsPage from "./pages/admin/AdminReservationsPage";
 
 
 function App() {
+  const location = useLocation();
+
   return (
+    <PageTransition key={location.key}>
     <Routes>
       <Route path="/" element={<AuthPage />} />
 
@@ -22,7 +27,7 @@ function App() {
 
       <Route path="/admin" element={<AdminDashboardPage />} />
 
-      <Route path="/admin/reservations" element={<AdminDashboardPage />} />
+      <Route path="/admin/reservations" element={<AdminReservationsPage />} />
 
       <Route path="/admin/hotels" element={<AdminHotelsPage />} />
 
@@ -41,6 +46,7 @@ function App() {
         element={<ReservationDetailsPage />}
       />
     </Routes>
+    </PageTransition>
   );
 }
 

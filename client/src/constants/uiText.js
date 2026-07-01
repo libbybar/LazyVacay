@@ -1,6 +1,7 @@
 export const UI_TEXT = {
   HOME_HEADLINE: "פחות תכנון, יותר חופשה",
   HOME_SUBTITLE: "כל מה שצריך לחופשה הבאה שלך",
+  LOGIN_SLOGAN: "האטלס שלך לחופשות בלתי נשכחות",
 
   // Navigation
   HOME: "דף הבית",
@@ -14,7 +15,7 @@ export const UI_TEXT = {
   LOGIN_TITLE: "כניסה למערכת",
   LOGIN_SUBTITLE: "גישה להזמנות ולפרטי החשבון שלך",
   REGISTER_TITLE: "יצירת חשבון",
-  REGISTER_SUBTITLE: "חשבון אחד לכל החופשות שלך",
+  REGISTER_SUBTITLE: "החשבון שלך לעולם של מקומות לינה",
   EMAIL_LABEL: "כתובת אימייל",
   EMAIL_PLACEHOLDER: "האימייל שלך",
   PASSWORD_LABEL: "סיסמה",
@@ -81,6 +82,18 @@ export const UI_TEXT = {
   CONFIRM_EDIT_ROOM_MESSAGE: "האם לשמור את השינויים בחדר?",
   CONFIRM_DELETE_ROOM_TITLE: "אישור מחיקת חדר",
   CONFIRM_DELETE_ROOM_MESSAGE: "האם למחוק את החדר מהמערכת?",
+  EDIT_PROFILE: "עריכת פרטים אישיים",
+  ADMIN_EDIT_RESERVATION: "עריכת הזמנה",
+  ADMIN_NO_RESERVATIONS: "אין הזמנות להצגה",
+  RESERVATION_DATES: "תאריכי הזמנה",
+  RESERVATION_HOTEL: "מלון",
+  RESERVATION_ROOM: "חדר",
+  RESERVATION_EMAIL: "אימייל",
+  CONFIRM_EDIT_RESERVATION_TITLE: "אישור עריכת הזמנה",
+  CONFIRM_EDIT_RESERVATION_MESSAGE: "האם לשמור את השינויים בהזמנה?",
+  STATUS_PENDING: "בהמתנה",
+  STATUS_CONFIRMED: "מאושרת",
+  STATUS_CANCELLED: "מבוטלת",
 
 
   // Search
@@ -112,6 +125,7 @@ export const UI_TEXT = {
   SELECT_ROOM: "לבחירת חדר",
   ROOM_SELECTED: "החדר נבחר",
   CHANGE_ROOM: "החלפת חדר אחר",
+  SQUARE_METERS: "מ״ר",
 
   //Search
   AVAILABLE_ROOMS_SEARCH_TITLE: "חיפוש חדרים פנויים",

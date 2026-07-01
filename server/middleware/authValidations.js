@@ -46,5 +46,39 @@ export const validateRegisterInput = (req, res, next) => {
      ));
   }
 
-  next(); 
+  next();
+};
+
+export const validateProfileUpdate = (req, res, next) => {
+  const { firstName, lastName, email } = req.body;
+
+  if (!firstName || !email) {
+    return next(new ApiError(
+      400,
+      ERROR_CODES.MISSING_REQUIRED_FIELDS,
+      "First name and email are required fields."));
+  }
+
+  if (firstName.trim().length < 2) {
+    return next(new ApiError(
+      400,
+      ERROR_CODES.INVALID_USER_INPUT,
+      "First name must be at least 2 characters long."));
+  }
+
+  if (lastName && lastName.trim().length < 2) {
+    return next(new ApiError(
+      400,
+      ERROR_CODES.INVALID_USER_INPUT,
+      "Last name must be at least 2 characters long."));
+  }
+
+  if (!EMAIL_REGEX.test(email.trim())) {
+    return next(new ApiError(
+      400,
+      ERROR_CODES.INVALID_EMAIL_FORMAT,
+      "Invalid email format."));
+  }
+
+  next();
 };

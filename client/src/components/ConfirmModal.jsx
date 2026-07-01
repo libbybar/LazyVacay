@@ -1,11 +1,9 @@
+import { ActionButton, SecondaryButton, ModalOverlay } from "../styles/SharedUI";
 import {
-  ModalOverlay,
   ModalCard,
   ModalTitle,
   ModalMessage,
   ModalButtonsRow,
-  ConfirmButton,
-  CancelButton,
 } from "../styles/ConfirmModalStyle";
 
 const ConfirmModal = ({
@@ -30,13 +28,13 @@ const ConfirmModal = ({
         <ModalMessage>{message}</ModalMessage>
 
         <ModalButtonsRow>
-          <CancelButton type="button" onClick={onCancel} disabled={isLoading}>
+          <SecondaryButton type="button" onClick={onCancel} disabled={isLoading}>
             {cancelText}
-          </CancelButton>
+          </SecondaryButton>
 
-          <ConfirmButton type="button" onClick={onConfirm} disabled={isLoading}>
+          <ActionButton type="button" onClick={onConfirm} disabled={isLoading}>
             {isLoading ? "שומרת..." : confirmText}
-          </ConfirmButton>
+          </ActionButton>
         </ModalButtonsRow>
       </ModalCard>
     </ModalOverlay>

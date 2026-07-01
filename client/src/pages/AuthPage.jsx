@@ -2,8 +2,19 @@ import { useState } from "react";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { loginUser, registerUser } from "../api/authApi";
-import { PageWrapper, AuthCard, Title, Form, InputGroup, Label, Input, SubmitButton, ToggleModeText, } from "../styles/AuthPageStyle";
 import { useNavigate } from "react-router-dom";
+import {
+  PageWrapper,
+  AuthCard,
+  Title,
+  Subtitle,
+  Form,
+  InputGroup,
+  Label,
+  Input,
+  SubmitButton,
+  ToggleModeText,
+} from "../styles/AuthPageStyle";
 
 const AuthPage = () => {
 
@@ -78,6 +89,10 @@ const AuthPage = () => {
         <Title>
           {isLoginMode ? UI_TEXT.LOGIN_TITLE : UI_TEXT.REGISTER_TITLE}
         </Title>
+
+        <Subtitle>
+          {isLoginMode ? UI_TEXT.LOGIN_SLOGAN : UI_TEXT.REGISTER_SUBTITLE}
+        </Subtitle>
 
         <Form onSubmit={handleSubmit}>
           {!isLoginMode && (

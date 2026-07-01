@@ -7,15 +7,15 @@ import AdminEntityCard from "../../components/admin/AdminEntityCard";
 import HotelForm from "../../components/admin/HotelForm";
 import ConfirmModal from "../../components/ConfirmModal";
 
+import { PageTitle, MessageText, ErrorText } from "../../styles/SharedUI";
+
 import {
   Container,
   TopBar,
-  PageTitle,
   ManagementGrid,
   ActionButton,
   SecondaryButton,
   DeleteButton,
-  MessageText,
 } from "../../styles/AdminPagesStyle";
 
 const emptyHotelForm = {
@@ -277,7 +277,7 @@ const AdminHotelsPage = () => {
         />
       )}
 
-      {error && <MessageText>{error}</MessageText>}
+      {error && <ErrorText>{error}</ErrorText>}
 
       {!error && hotels.length === 0 && (
         <MessageText>{UI_TEXT.NO_HOTELS_FOUND}</MessageText>

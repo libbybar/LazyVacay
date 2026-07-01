@@ -3,24 +3,31 @@ import { useNavigate } from "react-router-dom";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { apiClient } from "../api/apiClient";
-
+import { formatCurrency } from "../utils/formatCurrency";
 import {
   Container,
-  TopBar,
   PageTitle,
+  InputGroup,
+  SecondaryButton,
+  Label,
+  Input,
+  ActionButton,
+  MessageText,
+  ErrorText,
+  AtlasCard,
+  TopBar,
+} from "../styles/SharedUI";
+
+import {
   SearchCard,
   SearchTitle,
   SearchSubtitle,
   SearchForm,
-  InputGroup,
-  Label,
-  Input,
   HotelsGrid,
-  HotelCard,
   RoomDetail,
-  ActionButton,
-  SecondaryButton,
-  MessageText,
+  HeroSection,
+  MainHeadline,
+  SubHeadline
 } from "../styles/HotelsPageStyle";
 
 const HotelsPage = () => {
@@ -50,7 +57,6 @@ const HotelsPage = () => {
         setError(
           ERROR_MESSAGES[err.error] || ERROR_MESSAGES.INTERNAL_SERVER_ERROR
         );
-
         console.error("Hotel loading failed:", err);
       } finally {
         setIsLoadingHotels(false);
@@ -62,18 +68,15 @@ const HotelsPage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-
     navigate("/");
   };
 
   const handleSearchChange = (e) => {
     const { id, value } = e.target;
-
     setSearchData((prevData) => ({
       ...prevData,
       [id]: value,
     }));
-
     setError("");
   };
 
@@ -117,7 +120,6 @@ const HotelsPage = () => {
       startDate: "",
       endDate: "",
     });
-
     setAvailableRooms([]);
     setHasSearched(false);
     setError("");
@@ -134,29 +136,22 @@ const HotelsPage = () => {
   return (
     <Container>
       <TopBar>
-  <PageTitle>{UI_TEXT.HOTELS}</PageTitle>
+        <PageTitle>{UI_TEXT.HOTELS}</PageTitle>
 
-  <div
-    style={{
-      display: "flex",
-      gap: "0.75rem",
-    }}
-  >
-    <SecondaryButton
-      type="button"
-      onClick={() => navigate("/profile")}
-    >
-      {UI_TEXT.PROFILE_TITLE}
-    </SecondaryButton>
+        <div style={{ display: "flex", gap: "0.75rem" }}>
+          <SecondaryButton type="button" onClick={() => navigate("/profile")}>
+            {UI_TEXT.PROFILE_TITLE}
+          </SecondaryButton>
 
-    <SecondaryButton
-      type="button"
-      onClick={handleLogout}
-    >
-      {UI_TEXT.LOGOUT}
-    </SecondaryButton>
-  </div>
-</TopBar>
+          <SecondaryButton type="button" onClick={handleLogout}>
+            {UI_TEXT.LOGOUT}
+          </SecondaryButton>
+        </div>
+      </TopBar>
+      <HeroSection>
+        <MainHeadline>{UI_TEXT.HOME_HEADLINE}</MainHeadline>
+        <SubHeadline>{UI_TEXT.HOME_SUBTITLE}</SubHeadline>
+      </HeroSection>
 
       <SearchCard>
         <SearchTitle>{UI_TEXT.AVAILABLE_ROOMS_SEARCH_TITLE}</SearchTitle>
@@ -199,7 +194,7 @@ const HotelsPage = () => {
         </SearchForm>
       </SearchCard>
 
-      {error && <MessageText>{error}</MessageText>}
+      {error && <ErrorText>{error}</ErrorText>}
 
       {hasSearched ? (
         <>
@@ -210,33 +205,20 @@ const HotelsPage = () => {
           ) : (
             <HotelsGrid>
               {availableRooms.map((room) => (
-                <HotelCard key={room.id}>
+                <AtlasCard key={room.id}>
+                  {room.imageUrl && (
+                    <img src={room.imageUrl} alt={room.name} />
+                  )}
                   <div>
-                    <h2>{room.name}</h2>
-
-                    {room.hotel?.name && (
-                      <RoomDetail>
-                        {UI_TEXT.HOTEL_NAME}: {room.hotel.name}
-                      </RoomDetail>
-                    )}
-
-                    <RoomDetail>
-                      {UI_TEXT.ROOM_SIZE}: {room.size} מ״ר
-                    </RoomDetail>
-
-                    <RoomDetail>
-                      {UI_TEXT.MAX_CAPACITY}: {room.max_guests}
-                    </RoomDetail>
-
-                    <RoomDetail>
-                      {UI_TEXT.PRICE_PER_NIGHT}: ₪{room.price}
-                    </RoomDetail>
+                    <h2>{room.hotel?.name} - {room.name}</h2>
+                    <RoomDetail>{UI_TEXT.ROOM_SIZE}: {room.size} {UI_TEXT.SQUARE_METERS}</RoomDetail>
+                    <RoomDetail>{UI_TEXT.MAX_CAPACITY}: {room.maxGuests}</RoomDetail>
+                    <RoomDetail>{UI_TEXT.PRICE_PER_NIGHT}: {formatCurrency(room.price)}</RoomDetail>
                   </div>
-
                   <ActionButton onClick={() => navigate(`/rooms/${room.id}`)}>
                     {UI_TEXT.SELECT_ROOM}
                   </ActionButton>
-                </HotelCard>
+                </AtlasCard>
               ))}
             </HotelsGrid>
           )}
@@ -249,23 +231,20 @@ const HotelsPage = () => {
 
           <HotelsGrid>
             {hotels.map((hotel) => (
-              <HotelCard key={hotel.id}>
+              <AtlasCard key={hotel.id}>
+                {hotel.imageUrl && (
+                  <img src={hotel.imageUrl} alt={hotel.name} />
+                )}
                 <div>
                   <h2>{hotel.name}</h2>
-
                   <RoomDetail>{"⭐".repeat(hotel.stars)}</RoomDetail>
-
-                  <RoomDetail>
-                    📍 {hotel.city}, {hotel.country}
-                  </RoomDetail>
-
+                  <RoomDetail>📍 {hotel.city}, {hotel.country}</RoomDetail>
                   <RoomDetail>{hotel.description || UI_TEXT.NO_DESCRIPTION}</RoomDetail>
                 </div>
-
                 <ActionButton onClick={() => navigate(`/hotels/${hotel.id}`)}>
                   {UI_TEXT.VIEW_ROOMS}
                 </ActionButton>
-              </HotelCard>
+              </AtlasCard>
             ))}
           </HotelsGrid>
         </>

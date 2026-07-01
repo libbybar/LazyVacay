@@ -1,20 +1,37 @@
 export const theme = {
   colors: {
-    background: '#F9F8F6',
-    text: '#2C2A28',
+    background: '#FDFBF7',
+    text: '#2C3E50',
     border: '#D1C7BD',
-    cardBg: '#FFFFFF',
+    cardBg: '#F4ECE0',
     primary: '#1A365D',
     error: '#8B0000',
+    accent: "#8B5E34",
+    success: "#2E7D32",
+    
+    waxSeal: "#8B0000",       
+    waxSealDark: "#5D0000",   
+    waxSealText: "#F4ECE0",  
+    fadedText: "rgba(44, 62, 80, 0.3)", 
   },
   fonts: {
     heading: "'Frank Ruhl Libre', serif",
     main: "'Assistant', sans-serif",
+    coords: "'Courier New', monospace", 
+    handwritten: "'Amatic SC', cursive", 
   },
   borders: {
-    atlas: '1px solid #D1C7BD',
+    atlas: '1px solid rgba(44, 62, 80, 0.2)',
+  },
+  spacing: {
+    small: '0.5rem',
+    medium: '1rem',
+    large: '2rem',
   },
   
-  accent: "#8B5E34",
-  success: "#2E7D32",
+  radius: {
+    button: '30px',
+    card: '6px',
+    atlasCard: '20px'
+  }
 };

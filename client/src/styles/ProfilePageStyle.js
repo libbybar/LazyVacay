@@ -1,29 +1,8 @@
 import styled from "styled-components";
+import { StampCard } from './SharedUI';
 
-export const Container = styled.div`
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem;
-  direction: rtl;
-`;
-
-export const PageTitle = styled.h1`
-  color: ${(props) => props.theme.colors.primary};
-  text-align: center;
+export const ProfileCard = styled(StampCard)`
   margin-bottom: 2rem;
-`;
-
-export const ProfileCard = styled.section`
-  background-color: ${(props) => props.theme.colors.cardBg};
-  border: ${(props) => props.theme.borders.atlas};
-  border-radius: 6px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-`;
-
-export const SectionTitle = styled.h2`
-  color: ${(props) => props.theme.colors.primary};
-  margin-bottom: 1rem;
 `;
 
 export const DetailsGrid = styled.div`
@@ -35,15 +14,6 @@ export const DetailsGrid = styled.div`
 export const DetailText = styled.p`
   margin: 0;
   line-height: 1.6;
-`;
-
-export const ReservationsSection = styled.section`
-  background-color: ${(props) => props.theme.colors.cardBg};
-  border: ${(props) => props.theme.borders.atlas};
-  border-radius: 6px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  overflow-x: auto;
 `;
 
 export const ReservationsTable = styled.table`
@@ -70,26 +40,16 @@ export const ReservationsTable = styled.table`
   }
 
   a:hover {
-    color: ${(props) => props.theme.accent};
+    color: ${(props) => props.theme.colors.accent};
     text-decoration: underline;
   }
 `;
 
-export const MessageText = styled.p`
-  text-align: center;
-  padding: 2rem;
-  font-weight: bold;
-  color: ${(props) => props.theme.colors.error};
-`;
-
-export const BackButton = styled.button`
-  background: transparent;
-  border: none;
-  color: ${(props) => props.theme.colors.primary};
-  font-family: ${(props) => props.theme.fonts.main};
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 1.5rem;
+export const ProfileFormActions = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
 `;
 
 export const BackLink = styled.a`
@@ -100,7 +60,7 @@ export const BackLink = styled.a`
   margin-top: 1rem;
 
   &:hover {
-    color: ${(props) => props.theme.accent};
+    color: ${(props) => props.theme.colors.accent};
     text-decoration: underline;
   }
 `;

@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
+import { formatCurrency } from "../utils/formatCurrency";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
+import { BackButton, MessageText, ErrorText, DetailCard } from "../styles/SharedUI";
+
 import {
   Container,
-  BackButton,
-  RoomCard,
   RoomTitle,
   HotelName,
   RoomDetail,
   Description,
   ActionButton,
-  MessageText,
 } from "../styles/RoomDetailsPageStyle";
 
 const RoomDetailsPage = () => {
@@ -43,13 +43,13 @@ const RoomDetailsPage = () => {
     loadRoomDetails();
   }, [roomId]);
 
- 
+
   if (isLoading) {
     return <MessageText>{UI_TEXT.LOADING_ROOMS}</MessageText>;
   }
 
   if (error) {
-    return <MessageText>{error}</MessageText>;
+    return <ErrorText>{error}</ErrorText>;
   }
 
   if (!room) {
@@ -62,35 +62,51 @@ const RoomDetailsPage = () => {
         {UI_TEXT.BACK}
       </BackButton>
 
-      <RoomCard>
-        <RoomTitle>{room.name}</RoomTitle>
+      <DetailCard style={{ padding: 0, overflow: 'hidden' }}>
 
-        {room.hotel?.name && (
-          <HotelName>{room.hotel.name}</HotelName>
+        {room.imageUrl && (
+          <img
+            src={room.imageUrl}
+            alt={room.name}
+            style={{
+              width: '100%',
+              maxHeight: '300px',
+              aspectRatio: '21 / 9',
+              objectFit: 'cover',
+              borderBottom: '1px solid #D1C7BD',
+              display: 'block'
+            }}
+          />
         )}
 
-        
-        <RoomDetail>
-          {UI_TEXT.ROOM_SIZE}: {room.size} מ״ר
-        </RoomDetail>
-        
-        <RoomDetail>
-          {UI_TEXT.MAX_CAPACITY}: {room.maxGuests}
-        </RoomDetail>
+        <div style={{ padding: '2rem' }}>
+          <RoomTitle>{room.name}</RoomTitle>
 
-        <RoomDetail>
-          {UI_TEXT.PRICE_PER_NIGHT}: ₪{room.price}
-        </RoomDetail>
+          {room.hotel?.name && (
+            <HotelName>{room.hotel.name}</HotelName>
+          )}
 
-        <Description>
-          {room.description || UI_TEXT.NO_DESCRIPTION}
-        </Description>
+          <RoomDetail>
+            {UI_TEXT.ROOM_SIZE}: {room.size} מ״ר
+          </RoomDetail>
 
-       
-        <ActionButton onClick={() => navigate(`/rooms/${room.id}/booking`)}>
-          {UI_TEXT.CONTINUE_BOOKING}
-        </ActionButton>
-      </RoomCard>
+          <RoomDetail>
+            {UI_TEXT.MAX_CAPACITY}: {room.maxGuests}
+          </RoomDetail>
+
+          <RoomDetail>
+            {UI_TEXT.PRICE_PER_NIGHT}: {formatCurrency(room.price)}
+          </RoomDetail>
+
+          <Description>
+            {room.description || UI_TEXT.NO_DESCRIPTION}
+          </Description>
+
+          <ActionButton onClick={() => navigate(`/rooms/${room.id}/booking`)}>
+            {UI_TEXT.CONTINUE_BOOKING}
+          </ActionButton>
+        </div>
+      </DetailCard>
     </Container>
   );
 };

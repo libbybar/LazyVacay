@@ -36,5 +36,6 @@ export const ERROR_MESSAGES = {
 
   // Booking / Reservation
   ROOM_ALREADY_BOOKED: "החדר אינו זמין בתאריכים שנבחרו",
-  INVALID_ROOM_HOTEL_MATCH: "החדר שנבחר אינו שייך למלון זה"
+  INVALID_ROOM_HOTEL_MATCH: "החדר שנבחר אינו שייך למלון זה",
+  TOO_MANY_GUESTS: "מספר מקומות הלינה גדול מהמותר בחדר זה"
 };
