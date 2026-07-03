@@ -5,15 +5,18 @@ import { formatCurrency } from "../utils/formatCurrency";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
-import { PageTitle, MessageText, ErrorText, DetailCard } from "../styles/SharedUI";
+import { PageTitle, MessageText, ErrorText, StampCard } from "../styles/SharedUI";
 
 import {
   Container,
+  ConfirmationSubtitle,
+  SectionDivider,
   UserBlock,
   UserName,
   UserEmail,
   DetailsBlock,
   DetailText,
+  PriceBox,
   PriceText,
   ActionButton,
 } from "../styles/ReservationDetailsPageStyle";
@@ -45,6 +48,11 @@ const ReservationDetailsPage = () => {
     return new Date(dateString).toLocaleDateString("he-IL");
   };
 
+  const calculateNights = (start, end) => {
+    const diffTime = new Date(end) - new Date(start);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
+
   if (isLoading) {
     return <MessageText>{UI_TEXT.LOADING_RESERVATIONS}</MessageText>;
   }
@@ -59,39 +67,44 @@ const ReservationDetailsPage = () => {
 
   return (
     <Container>
-      <DetailCard>
+      <StampCard style={{ textAlign: "center" }}>
         <PageTitle>{UI_TEXT.RESERVATION_CONFIRMED}</PageTitle>
+        <ConfirmationSubtitle>{UI_TEXT.RESERVATION_CONFIRMED_SUBTITLE}</ConfirmationSubtitle>
 
         <UserBlock>
           <UserName>
             {reservation.user.firstName} {reservation.user.lastName}
           </UserName>
-
           <UserEmail>{reservation.user.email}</UserEmail>
         </UserBlock>
+
+        <SectionDivider src="/illustrations/Separators/section-2.svg" alt="" />
 
         <DetailsBlock>
           <DetailText>
             {UI_TEXT.HOTEL_NAME}: {reservation.hotel.name}
           </DetailText>
-
           <DetailText>
             {UI_TEXT.ROOM_NAME}: {reservation.room.name}
           </DetailText>
-
           <DetailText>
             {formatDate(reservation.startDate)} - {formatDate(reservation.endDate)}
+            {" "}({calculateNights(reservation.startDate, reservation.endDate)} {UI_TEXT.NIGHTS})
           </DetailText>
 
-          <PriceText>
-            {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: {formatCurrency(reservation.price)}
-          </PriceText>
+          <PriceBox>
+            <PriceText>
+              {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: {formatCurrency(reservation.price)}
+            </PriceText>
+          </PriceBox>
         </DetailsBlock>
+
+        <SectionDivider src="/illustrations/Separators/section-2.svg" alt="" />
 
         <ActionButton onClick={() => navigate("/hotels")}>
           {UI_TEXT.BACK_TO_HOTELS}
         </ActionButton>
-      </DetailCard>
+      </StampCard>
     </Container>
   );
 };

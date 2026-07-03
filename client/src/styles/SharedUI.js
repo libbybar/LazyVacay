@@ -101,6 +101,8 @@ export const AtlasCard = styled.article`
     border-bottom: ${(props) => props.theme.borders.atlas};
     display: block;
     transition: transform 0.35s ease-out;
+    mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 92%, transparent 100%);
   }
 
   &:hover img {
@@ -358,4 +360,19 @@ export const PageTransition = styled.div`
   @media (prefers-reduced-motion: reduce) {
     animation: none;
   }
+`;
+
+export const StarRating = styled.span`
+  font-family: ${(props) => props.theme.fonts.heading};
+  color: ${(props) => props.theme.colors.primary};
+  letter-spacing: 0.12em;
+  font-size: 1rem;
+`;
+
+export const LocationIcon = styled.img`
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  margin-inline-end: 0.25rem;
+  filter: brightness(0) saturate(100%) invert(17%) sepia(53%) saturate(800%) hue-rotate(193deg) brightness(90%) contrast(96%);
 `;

@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -60,12 +61,13 @@ model Room {
   price        Float
   hotelId      String 
   hotel        Hotel         @relation(fields: [hotelId], references: [id], onDelete: Cascade)
-  description  String?
-  imageUrl     String?
-  reservations Reservation[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @default(now())
-  isDeleted    Boolean       @default(false)
+  description   String?
+  imageUrl      String?
+  isAccessible  Boolean       @default(false)
+  reservations  Reservation[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now())
+  isDeleted     Boolean       @default(false)
 }
 
 model Reservation {

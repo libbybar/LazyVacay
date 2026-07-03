@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { apiClient } from "../api/apiClient";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatArea } from "../utils/formatArea";
 import {
   Container,
   PageTitle,
@@ -16,6 +17,8 @@ import {
   ErrorText,
   AtlasCard,
   TopBar,
+  LocationIcon,
+  StarRating,
 } from "../styles/SharedUI";
 
 import {
@@ -24,10 +27,18 @@ import {
   SearchSubtitle,
   SearchForm,
   HotelsGrid,
+  HotelRow,
+  HotelRowImage,
+  HotelRowText,
+  HotelRowActions,
+  HotelRowDivider,
   RoomDetail,
   HeroSection,
   MainHeadline,
-  SubHeadline
+  SubHeadline,
+  BrandSection,
+  CompassImg,
+  BrandName,
 } from "../styles/HotelsPageStyle";
 
 const HotelsPage = () => {
@@ -136,8 +147,6 @@ const HotelsPage = () => {
   return (
     <Container>
       <TopBar>
-        <PageTitle>{UI_TEXT.HOTELS}</PageTitle>
-
         <div style={{ display: "flex", gap: "0.75rem" }}>
           <SecondaryButton type="button" onClick={() => navigate("/profile")}>
             {UI_TEXT.PROFILE_TITLE}
@@ -147,6 +156,11 @@ const HotelsPage = () => {
             {UI_TEXT.LOGOUT}
           </SecondaryButton>
         </div>
+
+        <BrandSection>
+          <CompassImg src="/illustrations/icons/compass.svg" alt={UI_TEXT.SITE_NAME} />
+          <BrandName>{UI_TEXT.SITE_NAME}</BrandName>
+        </BrandSection>
       </TopBar>
       <HeroSection>
         <MainHeadline>{UI_TEXT.HOME_HEADLINE}</MainHeadline>
@@ -211,7 +225,7 @@ const HotelsPage = () => {
                   )}
                   <div>
                     <h2>{room.hotel?.name} - {room.name}</h2>
-                    <RoomDetail>{UI_TEXT.ROOM_SIZE}: {room.size} {UI_TEXT.SQUARE_METERS}</RoomDetail>
+                    <RoomDetail>{UI_TEXT.ROOM_SIZE}: {formatArea(room.size)}</RoomDetail>
                     <RoomDetail>{UI_TEXT.MAX_CAPACITY}: {room.maxGuests}</RoomDetail>
                     <RoomDetail>{UI_TEXT.PRICE_PER_NIGHT}: {formatCurrency(room.price)}</RoomDetail>
                   </div>
@@ -229,22 +243,31 @@ const HotelsPage = () => {
             <MessageText>{UI_TEXT.NO_HOTELS_FOUND}</MessageText>
           )}
 
+          <PageTitle>{UI_TEXT.HOTELS}</PageTitle>
+
           <HotelsGrid>
-            {hotels.map((hotel) => (
-              <AtlasCard key={hotel.id}>
-                {hotel.imageUrl && (
-                  <img src={hotel.imageUrl} alt={hotel.name} />
+            {hotels.map((hotel, index) => (
+              <React.Fragment key={hotel.id}>
+                {index > 0 && (
+                  <HotelRowDivider src="/illustrations/Separators/room-5.svg" alt="" />
                 )}
-                <div>
-                  <h2>{hotel.name}</h2>
-                  <RoomDetail>{"⭐".repeat(hotel.stars)}</RoomDetail>
-                  <RoomDetail>📍 {hotel.city}, {hotel.country}</RoomDetail>
-                  <RoomDetail>{hotel.description || UI_TEXT.NO_DESCRIPTION}</RoomDetail>
-                </div>
-                <ActionButton onClick={() => navigate(`/hotels/${hotel.id}`)}>
-                  {UI_TEXT.VIEW_ROOMS}
-                </ActionButton>
-              </AtlasCard>
+                <HotelRow>
+                  {hotel.imageUrl && (
+                    <HotelRowImage src={hotel.imageUrl} alt={hotel.name} />
+                  )}
+                  <HotelRowText>
+                    <h2>{hotel.name}</h2>
+                    <RoomDetail><StarRating>{"★".repeat(hotel.stars)}{"☆".repeat(5 - hotel.stars)}</StarRating></RoomDetail>
+                    <RoomDetail><LocationIcon src="/illustrations/icons/location.svg" alt="" />{hotel.city}, {hotel.country}</RoomDetail>
+                    <RoomDetail>{hotel.description || UI_TEXT.NO_DESCRIPTION}</RoomDetail>
+                  </HotelRowText>
+                  <HotelRowActions>
+                    <ActionButton onClick={() => navigate(`/hotels/${hotel.id}`)}>
+                      {UI_TEXT.VIEW_ROOMS}
+                    </ActionButton>
+                  </HotelRowActions>
+                </HotelRow>
+              </React.Fragment>
             ))}
           </HotelsGrid>
         </>

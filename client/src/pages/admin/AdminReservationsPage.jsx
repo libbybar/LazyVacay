@@ -45,6 +45,7 @@ const AdminReservationsPage = () => {
   const navigate = useNavigate();
 
   const [reservations, setReservations] = useState([]);
+  const [filterText, setFilterText] = useState("");
   const [reservationForm, setReservationForm] = useState(emptyReservationForm);
   const [editingReservationId, setEditingReservationId] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -134,6 +135,19 @@ const AdminReservationsPage = () => {
     setIsConfirmOpen(false);
   };
 
+  const filteredReservations = reservations.filter((r) => {
+    const q = filterText.toLowerCase();
+    if (!q) return true;
+    const fullName = `${r.user?.firstName ?? ""} ${r.user?.lastName ?? ""}`.toLowerCase();
+    return (
+      fullName.includes(q) ||
+      (r.user?.email ?? "").toLowerCase().includes(q) ||
+      (r.hotel?.name ?? "").toLowerCase().includes(q) ||
+      (r.room?.name ?? "").toLowerCase().includes(q) ||
+      (r.bookingNumber ?? r.id ?? "").toString().toLowerCase().includes(q)
+    );
+  });
+
   if (isLoadingReservations) {
     return (
       <Container>
@@ -212,8 +226,24 @@ const AdminReservationsPage = () => {
         <MessageText>{UI_TEXT.ADMIN_NO_RESERVATIONS}</MessageText>
       )}
 
+      {reservations.length > 0 && (
+        <InputGroup style={{ marginBottom: "1.5rem" }}>
+          <Input
+            type="text"
+            placeholder={UI_TEXT.ADMIN_SEARCH_RESERVATIONS}
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+          />
+          {filterText && (
+            <SecondaryButton type="button" onClick={() => setFilterText("")} style={{ marginTop: "0.5rem" }}>
+              {UI_TEXT.ADMIN_CLEAR_SEARCH}
+            </SecondaryButton>
+          )}
+        </InputGroup>
+      )}
+
       <ManagementGrid>
-        {reservations.map((reservation) => (
+        {filteredReservations.map((reservation) => (
           <AdminEntityCard
             key={reservation.id}
             title={`${UI_TEXT.BOOKING_NUMBER}: ${
@@ -262,8 +292,12 @@ const AdminReservationsPage = () => {
               },
             ]}
           />
-        ))}
+          ))}
       </ManagementGrid>
+
+      {filterText && filteredReservations.length === 0 && (
+        <MessageText>{UI_TEXT.ADMIN_NO_SEARCH_RESULTS}</MessageText>
+      )}
 
       <ConfirmModal
         isOpen={isConfirmOpen}

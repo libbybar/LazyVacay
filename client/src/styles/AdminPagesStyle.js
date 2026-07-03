@@ -34,8 +34,14 @@ export const DetailsCard = styled.section`
 `;
 
 export const DetailText = styled.p`
-  margin: 0.5rem 0;
+  margin: 0;
+  padding: 0.4rem 0;
   line-height: 1.5;
+  border-bottom: 1px solid ${(props) => props.theme.colors.border};
+
+  &:last-of-type {
+    border-bottom: none;
+  }
 `;
 
 export const ButtonsRow = styled.div`
@@ -47,24 +53,12 @@ export const ButtonsRow = styled.div`
 
 
 
-export const DeleteButton = styled.button`
+export const DeleteButton = styled(ActionButton)`
   background-color: ${(props) => props.theme.colors.error};
-  color: white;
-  border: none;
-  padding: 0.8rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: ${(props) => props.theme.fonts.main};
 
   &:hover {
+    background-color: ${(props) => props.theme.colors.error};
     opacity: 0.85;
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
   }
 `;
 

@@ -1,6 +1,28 @@
 import styled from "styled-components";
 import { StampCard } from './SharedUI';
 
+export const BrandSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  direction: ltr;
+`;
+
+export const CompassImg = styled.img`
+  width: 32px;
+  height: 32px;
+  display: block;
+  filter: brightness(0) saturate(100%) invert(17%) sepia(53%) saturate(800%) hue-rotate(193deg) brightness(90%) contrast(96%);
+`;
+
+export const BrandName = styled.span`
+  font-family: ${(props) => props.theme.fonts.heading};
+  font-size: 1.5rem;
+  color: ${(props) => props.theme.colors.primary};
+  letter-spacing: 0.5px;
+`;
+
 export const SearchCard = styled(StampCard)`
   padding: 2.5rem 3rem; 
   margin-bottom: 3rem; 
@@ -24,9 +46,78 @@ export const SearchForm = styled.form`
 `;
 
 export const HotelsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+`;
+
+export const HotelRowDivider = styled.img`
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.4;
+`;
+
+export const HotelRow = styled.article`
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-radius: 12px;
+  overflow: hidden;
+
+  &:hover > img {
+    transform: scale(1.03);
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+export const HotelRowImage = styled.img`
+  width: 300px;
+  min-width: 300px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease-out;
+  flex-shrink: 0;
+
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%),
+    linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%),
+    linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  mask-composite: intersect;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    min-width: unset;
+    height: 200px;
+    border-radius: 10px 10px 0 0;
+  }
+`;
+
+export const HotelRowText = styled.div`
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  direction: rtl;
+  text-align: right;
+`;
+
+export const HotelRowActions = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  flex-shrink: 0;
+
+  @media (max-width: 600px) {
+    padding: 1rem 1.5rem;
+  }
 `;
 
 export const RoomDetail = styled.p`

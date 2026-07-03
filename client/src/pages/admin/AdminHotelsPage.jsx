@@ -7,7 +7,7 @@ import AdminEntityCard from "../../components/admin/AdminEntityCard";
 import HotelForm from "../../components/admin/HotelForm";
 import ConfirmModal from "../../components/ConfirmModal";
 
-import { PageTitle, MessageText, ErrorText } from "../../styles/SharedUI";
+import { PageTitle, MessageText, ErrorText, LocationIcon, StarRating } from "../../styles/SharedUI";
 
 import {
   Container,
@@ -289,8 +289,8 @@ const AdminHotelsPage = () => {
             key={hotel.id}
             title={hotel.name}
             details={[
-              { value: "⭐".repeat(hotel.stars) },
-              { value: `📍 ${hotel.city}, ${hotel.country}` },
+              { value: <StarRating>{"★".repeat(hotel.stars)}{"☆".repeat(5 - hotel.stars)}</StarRating> },
+              { value: <><LocationIcon src="/illustrations/icons/location.svg" alt="" />{hotel.city}, {hotel.country}</> },
               { value: hotel.description || UI_TEXT.NO_DESCRIPTION },
             ]}
             actions={[

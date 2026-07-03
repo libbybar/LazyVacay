@@ -2,15 +2,43 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatArea } from "../utils/formatArea";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
-import { BackButton, ActionButton, SecondaryButton, SignatureButton, PageTitle, MessageText, ErrorText, InputGroup, Label, Input, DetailCard, ModalOverlay } from "../styles/SharedUI";
+import {
+  BackButton,
+  ActionButton,
+  SecondaryButton,
+  SignatureButton,
+  PageTitle,
+  MessageText,
+  ErrorText,
+  InputGroup,
+  Label,
+  Input,
+  ModalOverlay,
+  StampCard,
+} from "../styles/SharedUI";
 
 import {
   Container,
+  TwoColumnLayout,
+  RoomPreviewPanel,
+  RoomPreviewImage,
+  RoomPreviewContent,
+  PanelDivider,
+  FormPanel,
   RoomName,
+  HotelPreviewName,
   DetailText,
+  PreviewIconRow,
+  PreviewIconItem,
+  PreviewIconLabel,
+  PreviewIconValueRow,
+  PreviewIcon,
+  AccessibilityBadge,
+  AccessibilityIcon,
   Form,
   PriceBox,
   ModalCard,
@@ -173,72 +201,116 @@ const BookingPage = () => {
         {UI_TEXT.BACK}
       </BackButton>
 
-      <DetailCard>
-        <PageTitle>{UI_TEXT.RESERVATION_DETAILS}</PageTitle>
+      <PageTitle>{UI_TEXT.RESERVATION_DETAILS}</PageTitle>
 
-        <RoomName>{room.name}</RoomName>
+      <StampCard style={{ padding: 0 }}>
+      <TwoColumnLayout>
+        <RoomPreviewPanel>
+          {room.imageUrl && (
+            <RoomPreviewImage src={room.imageUrl} alt={room.name} />
+          )}
+          <RoomPreviewContent>
+            <RoomName>{room.name}</RoomName>
 
-        {room.hotel?.name && <DetailText>{room.hotel.name}</DetailText>}
+            {room.hotel?.name && (
+              <HotelPreviewName>{room.hotel.name}</HotelPreviewName>
+            )}
 
-        <DetailText>
-          {UI_TEXT.PRICE_PER_NIGHT}: {formatCurrency(room.price)}
-        </DetailText>
+            <PreviewIconRow>
+              <PreviewIconItem>
+                <PreviewIconLabel>{UI_TEXT.PRICE_PER_NIGHT}</PreviewIconLabel>
+                <PreviewIconValueRow>
+                  <PreviewIcon src="/illustrations/icons/price.svg" alt="" />
+                  <span>{formatCurrency(room.price)}</span>
+                </PreviewIconValueRow>
+              </PreviewIconItem>
+              <PreviewIconItem>
+                <PreviewIconLabel>{UI_TEXT.MAX_CAPACITY}</PreviewIconLabel>
+                <PreviewIconValueRow>
+                  <PreviewIcon src="/illustrations/icons/guests.svg" alt="" />
+                  <span>{room.maxGuests}</span>
+                </PreviewIconValueRow>
+              </PreviewIconItem>
+              <PreviewIconItem>
+                <PreviewIconLabel>{UI_TEXT.ROOM_SIZE}</PreviewIconLabel>
+                <PreviewIconValueRow>
+                  <PreviewIcon src="/illustrations/icons/room-size.svg" alt="" />
+                  <span>{formatArea(room.size)}</span>
+                </PreviewIconValueRow>
+              </PreviewIconItem>
+            </PreviewIconRow>
 
-        <Form onSubmit={handleSubmit}>
-          <InputGroup>
-            <Label htmlFor="startDate">{UI_TEXT.CHECK_IN_LABEL}</Label>
-            <Input
-              type="date"
-              id="startDate"
-              min={today}
-              value={formData.startDate}
-              onChange={handleChange}
-              required
-            />
-          </InputGroup>
+            {room.isAccessible && (
+              <AccessibilityBadge>
+                <AccessibilityIcon src="/illustrations/icons/accessibility.svg" alt="" />
+                <span>{UI_TEXT.ACCESSIBLE_ROOM}</span>
+              </AccessibilityBadge>
+            )}
 
-          <InputGroup>
-            <Label htmlFor="endDate">{UI_TEXT.CHECK_OUT_LABEL}</Label>
-            <Input
-              type="date"
-              id="endDate"
-              min={formData.startDate || today}
-              value={formData.endDate}
-              onChange={handleChange}
-              required
-            />
-          </InputGroup>
+          </RoomPreviewContent>
+        </RoomPreviewPanel>
 
-          <InputGroup>
-            <Label htmlFor="guests">{UI_TEXT.ACCOMMODATION_CAPACITY_LABEL}</Label>
-            <Input
-              type="number"
-              id="guests"
-              min="1"
-              max={room.maxGuests}
-              value={formData.guests}
-              onChange={handleChange}
-              required
-            />
-          </InputGroup>
+        <PanelDivider>
+          <img src="/illustrations/Separators/section-1.svg" alt="" />
+        </PanelDivider>
 
-          <PriceBox>
-            <DetailText>
-              {UI_TEXT.NIGHTS}: {nights}
-            </DetailText>
+        <FormPanel>
+          <Form onSubmit={handleSubmit}>
+            <InputGroup>
+              <Label htmlFor="startDate">{UI_TEXT.CHECK_IN_LABEL}</Label>
+              <Input
+                type="date"
+                id="startDate"
+                min={today}
+                value={formData.startDate}
+                onChange={handleChange}
+                required
+              />
+            </InputGroup>
 
-            <DetailText>
-              {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: {formatCurrency(finalPrice)}
-            </DetailText>
-          </PriceBox>
+            <InputGroup>
+              <Label htmlFor="endDate">{UI_TEXT.CHECK_OUT_LABEL}</Label>
+              <Input
+                type="date"
+                id="endDate"
+                min={formData.startDate || today}
+                value={formData.endDate}
+                onChange={handleChange}
+                required
+              />
+            </InputGroup>
 
-          {error && <ErrorText>{error}</ErrorText>}
+            <InputGroup>
+              <Label htmlFor="guests">{UI_TEXT.ACCOMMODATION_CAPACITY_LABEL}</Label>
+              <Input
+                type="number"
+                id="guests"
+                min="1"
+                max={room.maxGuests}
+                value={formData.guests}
+                onChange={handleChange}
+                required
+              />
+            </InputGroup>
 
-          <ActionButton type="submit" disabled={isSubmitting}>
-            {UI_TEXT.CONFIRM_BOOKING}
-          </ActionButton>
-        </Form>
-      </DetailCard>
+            <PriceBox>
+              <DetailText>
+                {UI_TEXT.NIGHTS}: {nights}
+              </DetailText>
+              <DetailText>
+                {UI_TEXT.TOTAL_PRICE_INCLUDING_VAT}: {formatCurrency(finalPrice)}
+              </DetailText>
+            </PriceBox>
+
+            {error && <ErrorText>{error}</ErrorText>}
+
+            <ActionButton type="submit" disabled={isSubmitting}>
+              {UI_TEXT.CONFIRM_BOOKING}
+            </ActionButton>
+          </Form>
+        </FormPanel>
+      </TwoColumnLayout>
+      </StampCard>
 
       {isReviewModalOpen && (
         <ModalOverlay>

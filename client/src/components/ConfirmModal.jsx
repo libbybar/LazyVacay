@@ -1,4 +1,5 @@
 import { ActionButton, SecondaryButton, ModalOverlay } from "../styles/SharedUI";
+import { UI_TEXT } from "../constants/uiText";
 import {
   ModalCard,
   ModalTitle,
@@ -33,7 +34,7 @@ const ConfirmModal = ({
           </SecondaryButton>
 
           <ActionButton type="button" onClick={onConfirm} disabled={isLoading}>
-            {isLoading ? "שומרת..." : confirmText}
+            {isLoading ? UI_TEXT.SAVING_IN_PROGRESS : confirmText}
           </ActionButton>
         </ModalButtonsRow>
       </ModalCard>

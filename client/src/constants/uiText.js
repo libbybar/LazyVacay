@@ -1,4 +1,5 @@
 export const UI_TEXT = {
+  SITE_NAME: "LazyVacay",
   HOME_HEADLINE: "פחות תכנון, יותר חופשה",
   HOME_SUBTITLE: "כל מה שצריך לחופשה הבאה שלך",
   LOGIN_SLOGAN: "האטלס שלך לחופשות בלתי נשכחות",
@@ -63,6 +64,7 @@ export const UI_TEXT = {
   CONFIRM_CREATE_HOTEL_TITLE: "אישור הוספת מלון",
   CONFIRM_CREATE_HOTEL_MESSAGE: "האם לשמור את המלון החדש במערכת?",
   SAVING: "שמירה...",
+  SAVING_IN_PROGRESS: "שומרת...",
   CONFIRM_EDIT_HOTEL_TITLE: "אישור עריכת מלון",
   CONFIRM_EDIT_HOTEL_MESSAGE: "האם לשמור את השינויים במלון?",
   CONFIRM_DELETE_HOTEL_TITLE: "אישור מחיקת מלון",
@@ -85,6 +87,9 @@ export const UI_TEXT = {
   EDIT_PROFILE: "עריכת פרטים אישיים",
   ADMIN_EDIT_RESERVATION: "עריכת הזמנה",
   ADMIN_NO_RESERVATIONS: "אין הזמנות להצגה",
+  ADMIN_SEARCH_RESERVATIONS: "חיפוש לפי שם, מלון, חדר, אורח/ת או מספר הזמנה",
+  ADMIN_NO_SEARCH_RESULTS: "לא נמצאו הזמנות התואמות את החיפוש",
+  ADMIN_CLEAR_SEARCH: "ניקוי חיפוש",
   RESERVATION_DATES: "תאריכי הזמנה",
   RESERVATION_HOTEL: "מלון",
   RESERVATION_ROOM: "חדר",
@@ -113,19 +118,19 @@ export const UI_TEXT = {
   HOTEL_DETAILS: "פרטי המלון",
   HOTEL_NAME: "מלון",
   AVAILABLE_ROOMS: "חדרים זמינים",
-  VIEW_ROOMS: "צפייה בחדרי המלון",
+  VIEW_ROOMS: "אפשרויות לינה",
   ROOM_SIZE: "גודל החדר",
   PRICE_PER_NIGHT: "מחיר ללילה, ללא מע״מ",
   MAX_CAPACITY: "מקומות לינה",
   BOOK_ROOM: "הזמנה",
-  CONTINUE_BOOKING: "המשך להזמנה",
+  CONTINUE_BOOKING: "להמשך ההזמנה",
 
   // Room
   ROOM_NAME: "חדר",
   SELECT_ROOM: "לבחירת חדר",
   ROOM_SELECTED: "החדר נבחר",
   CHANGE_ROOM: "החלפת חדר אחר",
-  SQUARE_METERS: "מ״ר",
+  ACCESSIBLE_ROOM: "חדר נגיש",
 
   //Search
   AVAILABLE_ROOMS_SEARCH_TITLE: "חיפוש חדרים פנויים",
@@ -137,6 +142,7 @@ export const UI_TEXT = {
   // Reservation
   RESERVATION_DETAILS: "פרטי ההזמנה",
   RESERVATION_CONFIRMED: "ההזמנה אושרה",
+  RESERVATION_CONFIRMED_SUBTITLE: "נשמח לארח אותך",
   CONFIRM_BOOKING: "אישור הזמנה",
   TOTAL_PRICE_INCLUDING_VAT: "מחיר כולל מע״מ",
   BACK_TO_HOTELS: "חזרה למלונות",
@@ -146,7 +152,7 @@ export const UI_TEXT = {
   BOOKING_REVIEW_SUBTITLE: "כדאי לוודא שכל הפרטים נכונים לפני אישור סופי",
   BOOKING_REVIEW_HOTEL: "המלון שלך",
   BOOKING_REVIEW_ROOM: "החדר שהזמנת",
-  BOOKING_REVIEW_DATES: "תאריכי החופשה שבחרתי",
+  BOOKING_REVIEW_DATES: "תאריכי החופשה שבחרת",
   BOOKING_REVIEW_FINAL_CONFIRM: "אישור סופי",
   BACK_TO_EDITING: "חזרה לעריכה",
 
@@ -186,6 +192,7 @@ export const UI_TEXT = {
   LOADING_RESERVATIONS: "טעינת הזמנות...",
 
   // Generic UI
+  AREA_UNIT: "מ״ר",
   NO_DESCRIPTION: "אין תיאור זמין",
   UNKNOWN_LOCATION: "מיקום לא ידוע",
   NIGHT: "לילה",

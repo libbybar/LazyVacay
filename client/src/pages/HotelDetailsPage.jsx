@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatArea } from "../utils/formatArea";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
@@ -12,19 +13,33 @@ import {
   ActionButton,
   MessageText,
   ErrorText,
-  AtlasCard,
   SectionTitle,
 } from "../styles/SharedUI";
 
 import {
   HotelHeader,
+  HotelHeroImage,
+  HeroOverlay,
+  HeroContent,
+  HeroCaption,
   HotelTitle,
   HotelLocation,
   StarsText,
   Description,
   RoomsGrid,
+  RoomRowDivider,
+  RoomRow,
+  RoomRowImage,
+  RoomZoneDivider,
+  RoomRowText,
+  RoomRowStats,
+  RoomStatColumn,
+  RoomStatLabel,
+  RoomStatIcon,
+  RoomStatValue,
+  RoomRowActions,
+  RoomAccessibilityIcon,
   RoomTitle,
-  RoomDetail,
 } from "../styles/HotelDetailsPageStyle";
 
 const HotelDetailsPage = () => {
@@ -80,33 +95,31 @@ const HotelDetailsPage = () => {
         {UI_TEXT.BACK}
       </BackButton>
 
-      <HotelHeader style={{ padding: 0, overflow: 'hidden' }}>
-        {hotel.imageUrl && (
-          <img 
-            src={hotel.imageUrl} 
-            alt={hotel.name} 
-            style={{
-              width: '100%',
-              maxHeight: '350px',       
-              aspectRatio: '21 / 9',   
-              objectFit: 'cover',       
-              borderBottom: '1px solid #D1C7BD', 
-              display: 'block'
-            }}
-          />
+      <HotelHeader>
+        {hotel.imageUrl ? (
+          <>
+            <HotelHeroImage src={hotel.imageUrl} alt={hotel.name} />
+            <HeroOverlay />
+          </>
+        ) : (
+          <HeroContent>
+            <HotelTitle>{hotel.name}</HotelTitle>
+            <HotelLocation>{hotel.city}, {hotel.country}</HotelLocation>
+            <StarsText>{"★".repeat(hotel.stars)}{"☆".repeat(5 - hotel.stars)}</StarsText>
+          </HeroContent>
         )}
-
-        <div style={{ padding: '2rem' }}>
-          <HotelTitle>{hotel.name}</HotelTitle>
-          <HotelLocation>
-            {hotel.city}, {hotel.country}
-          </HotelLocation>
-          <StarsText>{"⭐".repeat(hotel.stars)}</StarsText>
-          <Description>
-            {hotel.description || UI_TEXT.NO_DESCRIPTION}
-          </Description>
-        </div>
       </HotelHeader>
+
+      {hotel.imageUrl ? (
+        <HeroCaption>
+          <HotelTitle>{hotel.name}</HotelTitle>
+          <HotelLocation>{hotel.city}, {hotel.country}</HotelLocation>
+          <StarsText>{"★".repeat(hotel.stars)}{"☆".repeat(5 - hotel.stars)}</StarsText>
+          <Description>{hotel.description || UI_TEXT.NO_DESCRIPTION}</Description>
+        </HeroCaption>
+      ) : (
+        <Description>{hotel.description || UI_TEXT.NO_DESCRIPTION}</Description>
+      )}
 
       <SectionTitle>{UI_TEXT.VIEW_ROOMS}</SectionTitle>
 
@@ -114,38 +127,58 @@ const HotelDetailsPage = () => {
         <MessageText>{UI_TEXT.NO_ROOMS_IN_HOTEL}</MessageText>
       ) : (
         <RoomsGrid>
-          {hotel.rooms.map((room) => (
-            <AtlasCard key={room.id}>
-              
-              {room.imageUrl && (
-                <img src={room.imageUrl} alt={room.name} />
+          {hotel.rooms.map((room, index) => (
+            <React.Fragment key={room.id}>
+              {index > 0 && (
+                <RoomRowDivider
+                  src="/illustrations/Separators/room-4.svg"
+                  alt=""
+                />
               )}
-
-              <div>
-                <RoomTitle>{room.name}</RoomTitle>
-
-                <RoomDetail>
-                  {UI_TEXT.ROOM_SIZE}: {room.size} מ״ר
-                </RoomDetail>
-
-                <RoomDetail>
-                    {UI_TEXT.MAX_CAPACITY}: {room.maxGuests}
-                </RoomDetail>
-
-                <RoomDetail>
-                  {UI_TEXT.PRICE_PER_NIGHT}: {formatCurrency(room.price)}
-                </RoomDetail>
-
-                <Description>
-                  {room.description || UI_TEXT.NO_DESCRIPTION}
-                </Description>
-              </div>
-
-              <ActionButton onClick={() => navigate(`/rooms/${room.id}`)}>
-                {UI_TEXT.SELECT_ROOM}
-              </ActionButton>
-
-            </AtlasCard>
+              <RoomRow>
+                {room.imageUrl && (
+                  <RoomRowImage src={room.imageUrl} alt={room.name} />
+                )}
+                <RoomRowText>
+                  <RoomTitle>{room.name}</RoomTitle>
+                  <Description>{room.description || UI_TEXT.NO_DESCRIPTION}</Description>
+                </RoomRowText>
+                <RoomZoneDivider $rotate={90}>
+                  <img src="/illustrations/Separators/section-3.svg" alt="" />
+                </RoomZoneDivider>
+                <RoomRowStats>
+                  <RoomStatColumn>
+                    <RoomStatLabel>{UI_TEXT.ROOM_SIZE}</RoomStatLabel>
+                    <RoomStatIcon src="/illustrations/icons/room-size.svg" alt="" />
+                    <RoomStatValue>{formatArea(room.size)}</RoomStatValue>
+                  </RoomStatColumn>
+                  <RoomStatColumn>
+                    <RoomStatLabel>{UI_TEXT.MAX_CAPACITY}</RoomStatLabel>
+                    <RoomStatIcon src="/illustrations/icons/guests.svg" alt="" />
+                    <RoomStatValue>{room.maxGuests}</RoomStatValue>
+                  </RoomStatColumn>
+                  <RoomStatColumn>
+                    <RoomStatLabel>{UI_TEXT.PRICE_PER_NIGHT}</RoomStatLabel>
+                    <RoomStatIcon src="/illustrations/icons/price.svg" alt="" />
+                    <RoomStatValue>{formatCurrency(room.price)}</RoomStatValue>
+                  </RoomStatColumn>
+                </RoomRowStats>
+                <RoomZoneDivider $rotate={270}>
+                  <img src="/illustrations/Separators/section-3.svg" alt="" />
+                </RoomZoneDivider>
+                <RoomRowActions>
+                  {room.isAccessible && (
+                    <RoomAccessibilityIcon
+                      src="/illustrations/icons/accessibility.svg"
+                      alt={UI_TEXT.ACCESSIBLE_ROOM}
+                    />
+                  )}
+                  <ActionButton onClick={() => navigate(`/rooms/${room.id}`)}>
+                    {UI_TEXT.SELECT_ROOM}
+                  </ActionButton>
+                </RoomRowActions>
+              </RoomRow>
+            </React.Fragment>
           ))}
         </RoomsGrid>
       )}

@@ -6,7 +6,7 @@ export const DashboardGrid = styled.div`
   gap: 1.5rem;
 
   @media (min-width: 800px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
@@ -19,6 +19,8 @@ export const DashboardCard = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
+  text-align: center;
 `;
 
 export const CardText = styled.p`

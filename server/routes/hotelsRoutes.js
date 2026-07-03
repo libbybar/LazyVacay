@@ -78,6 +78,7 @@ router.get("/available_rooms", requireAuth, async (req, res, next) => {
       size: room.size,
       description: room.description,
       imageUrl: room.imageUrl,
+      isAccessible: room.isAccessible,
       hotel: room.hotel,
     }));
 

@@ -2,16 +2,25 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatArea } from "../utils/formatArea";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
-import { BackButton, MessageText, ErrorText, DetailCard } from "../styles/SharedUI";
+import { BackButton, MessageText, ErrorText, StampCard } from "../styles/SharedUI";
 
 import {
   Container,
+  RoomHeroImage,
   RoomTitle,
   HotelName,
-  RoomDetail,
+  StatsRow,
+  StatZoneDivider,
+  StatColumn,
+  StatLabel,
+  StatIcon,
+  StatValue,
+  AccessibilityBadge,
+  AccessibilityIcon,
   Description,
   ActionButton,
 } from "../styles/RoomDetailsPageStyle";
@@ -62,21 +71,10 @@ const RoomDetailsPage = () => {
         {UI_TEXT.BACK}
       </BackButton>
 
-      <DetailCard style={{ padding: 0, overflow: 'hidden' }}>
+      <StampCard style={{ padding: 0 }}>
 
         {room.imageUrl && (
-          <img
-            src={room.imageUrl}
-            alt={room.name}
-            style={{
-              width: '100%',
-              maxHeight: '300px',
-              aspectRatio: '21 / 9',
-              objectFit: 'cover',
-              borderBottom: '1px solid #D1C7BD',
-              display: 'block'
-            }}
-          />
+          <RoomHeroImage src={room.imageUrl} alt={room.name} />
         )}
 
         <div style={{ padding: '2rem' }}>
@@ -86,17 +84,36 @@ const RoomDetailsPage = () => {
             <HotelName>{room.hotel.name}</HotelName>
           )}
 
-          <RoomDetail>
-            {UI_TEXT.ROOM_SIZE}: {room.size} מ״ר
-          </RoomDetail>
+          <StatsRow>
+            <StatColumn>
+              <StatLabel>{UI_TEXT.ROOM_SIZE}</StatLabel>
+              <StatIcon src="/illustrations/icons/room-size.svg" alt="" />
+              <StatValue>{formatArea(room.size)}</StatValue>
+            </StatColumn>
+            <StatZoneDivider>
+              <img src="/illustrations/Separators/section-4.svg" alt="" />
+            </StatZoneDivider>
+            <StatColumn>
+              <StatLabel>{UI_TEXT.MAX_CAPACITY}</StatLabel>
+              <StatIcon src="/illustrations/icons/guests.svg" alt="" />
+              <StatValue>{room.maxGuests}</StatValue>
+            </StatColumn>
+            <StatZoneDivider>
+              <img src="/illustrations/Separators/section-4.svg" alt="" />
+            </StatZoneDivider>
+            <StatColumn>
+              <StatLabel>{UI_TEXT.PRICE_PER_NIGHT}</StatLabel>
+              <StatIcon src="/illustrations/icons/price.svg" alt="" />
+              <StatValue>{formatCurrency(room.price)}</StatValue>
+            </StatColumn>
+          </StatsRow>
 
-          <RoomDetail>
-            {UI_TEXT.MAX_CAPACITY}: {room.maxGuests}
-          </RoomDetail>
-
-          <RoomDetail>
-            {UI_TEXT.PRICE_PER_NIGHT}: {formatCurrency(room.price)}
-          </RoomDetail>
+          {room.isAccessible && (
+            <AccessibilityBadge>
+              <AccessibilityIcon src="/illustrations/icons/accessibility.svg" alt="" />
+              <span>{UI_TEXT.ACCESSIBLE_ROOM}</span>
+            </AccessibilityBadge>
+          )}
 
           <Description>
             {room.description || UI_TEXT.NO_DESCRIPTION}
@@ -106,7 +123,7 @@ const RoomDetailsPage = () => {
             {UI_TEXT.CONTINUE_BOOKING}
           </ActionButton>
         </div>
-      </DetailCard>
+      </StampCard>
     </Container>
   );
 };
