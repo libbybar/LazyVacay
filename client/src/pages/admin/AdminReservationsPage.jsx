@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "../../api/apiClient";
 import { formatCurrency } from "../../utils/formatCurrency";
+import { formatDate } from "../../utils/formatDate";
 import { UI_TEXT } from "../../constants/uiText";
 import { ERROR_MESSAGES } from "../../constants/errorMessages";
 import AdminEntityCard from "../../components/admin/AdminEntityCard";
@@ -27,12 +28,6 @@ const formatDateForInput = (dateValue) => {
   if (!dateValue) return "";
 
   return new Date(dateValue).toISOString().split("T")[0];
-};
-
-const formatDateForDisplay = (dateValue) => {
-  if (!dateValue) return "";
-
-  return new Date(dateValue).toLocaleDateString("he-IL");
 };
 
 const emptyReservationForm = {
@@ -236,7 +231,7 @@ const AdminReservationsPage = () => {
           />
           {filterText && (
             <SecondaryButton type="button" onClick={() => setFilterText("")} style={{ marginTop: "0.5rem" }}>
-              {UI_TEXT.ADMIN_CLEAR_SEARCH}
+              {UI_TEXT.CLEAR_SEARCH}
             </SecondaryButton>
           )}
         </InputGroup>
@@ -273,9 +268,9 @@ const AdminReservationsPage = () => {
                 }`,
               },
               {
-                value: `${UI_TEXT.RESERVATION_DATES}: ${formatDateForDisplay(
+                value: `${UI_TEXT.RESERVATION_DATES}: ${formatDate(
                   reservation.startDate
-                )} - ${formatDateForDisplay(reservation.endDate)}`,
+                )} - ${formatDate(reservation.endDate)}`,
               },
               {
                 value: `${UI_TEXT.RESERVATION_STATUS}: ${reservation.status}`,

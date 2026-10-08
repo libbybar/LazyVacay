@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatDate } from "../utils/formatDate";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
@@ -43,10 +44,6 @@ const ReservationDetailsPage = () => {
 
     loadReservation();
   }, [reservationId]);
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("he-IL");
-  };
 
   const calculateNights = (start, end) => {
     const diffTime = new Date(end) - new Date(start);

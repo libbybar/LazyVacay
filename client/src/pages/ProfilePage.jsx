@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
 import { formatCurrency } from "../utils/formatCurrency";
+import { formatDate } from "../utils/formatDate";
+import { hasReservationEnded } from "../utils/reservationDates";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { useNavigate } from "react-router-dom";
@@ -71,26 +73,13 @@ function ProfilePage() {
 
     const { user, reservations } = profileData;
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const futureReservations = reservations.filter(
+        (reservation) => !hasReservationEnded(reservation.endDate)
+    );
 
-    const futureReservations = reservations.filter((reservation) => {
-        const endDate = new Date(reservation.endDate);
-        endDate.setHours(0, 0, 0, 0);
-
-        return endDate >= today;
-    });
-
-    const pastReservations = reservations.filter((reservation) => {
-        const endDate = new Date(reservation.endDate);
-        endDate.setHours(0, 0, 0, 0);
-
-        return endDate < today;
-    });
-
-    const formatDate = (dateValue) => {
-        return new Date(dateValue).toLocaleDateString("he-IL");
-    };
+    const pastReservations = reservations.filter((reservation) =>
+        hasReservationEnded(reservation.endDate)
+    );
 
 
     const handleOpenEdit = () => {

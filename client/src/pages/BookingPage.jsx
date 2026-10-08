@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { apiClient } from "../api/apiClient";
 import { formatCurrency } from "../utils/formatCurrency";
 import { formatArea } from "../utils/formatArea";
+import { formatDate } from "../utils/formatDate";
 import { UI_TEXT } from "../constants/uiText";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 
@@ -92,10 +93,6 @@ const BookingPage = () => {
     }));
 
     setError("");
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("he-IL");
   };
 
   const calculateNights = () => {
