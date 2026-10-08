@@ -34,7 +34,7 @@ export const createApp = ({ enableRateLimit = true } = {}) => {
 
 const createCorsOptions = (isDevelopment) => {
   const allowedOrigins = [
-    process.env.FRONTEND_URL // TODO: Add the frontend URL after deploying the client application
+    process.env.FRONTEND_URL
   ];
 
   return {
