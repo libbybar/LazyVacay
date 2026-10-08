@@ -3,8 +3,7 @@ client/node_modules/
 server/node_modules/
 .env
 .vscode/
-.gitignore
-.git-history
+git-history.txt
 PROGRESS.md
 AGENTS.md
 .claude/
