@@ -6,6 +6,8 @@ const TEST_ENV_FILE = new URL("../.env.test", import.meta.url);
 const TEST_JWT_SECRET = "lazyvacay-test-jwt-secret";
 const CONNECT_TIMEOUT_SECONDS = 30;
 
+export const loadUnitTestEnv = () => ({ JWT_SECRET: TEST_JWT_SECRET });
+
 export const loadTestEnv = () => {
   const fileValues = readTestEnvFile();
 
