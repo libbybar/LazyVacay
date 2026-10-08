@@ -59,7 +59,7 @@ const RoomForm = ({
       </FormGrid>
 
       <InputGroup>
-        <Label>{UI_TEXT.DESCRIPTION}</Label>
+        <Label>{UI_TEXT.DESCRIPTION_LABEL}</Label>
         <TextArea name="description" value={room.description} onChange={onChange} />
       </InputGroup>
 

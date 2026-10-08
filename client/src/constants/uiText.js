@@ -1,10 +1,12 @@
 export const UI_TEXT = {
+
+  // ─── Site / Branding ───────────────────────────────────────────
   SITE_NAME: "LazyVacay",
   HOME_HEADLINE: "פחות תכנון, יותר חופשה",
   HOME_SUBTITLE: "כל מה שצריך לחופשה הבאה שלך",
   LOGIN_SLOGAN: "האטלס שלך לחופשות בלתי נשכחות",
 
-  // Navigation
+  // ─── Navigation ────────────────────────────────────────────────
   HOME: "דף הבית",
   HOTELS: "מלונות",
   MY_RESERVATIONS: "ההזמנות שלך",
@@ -12,7 +14,7 @@ export const UI_TEXT = {
   REGISTER: "הרשמה",
   LOGOUT: "יציאה",
 
-  // Auth
+  // ─── Auth ──────────────────────────────────────────────────────
   LOGIN_TITLE: "כניסה למערכת",
   LOGIN_SUBTITLE: "גישה להזמנות ולפרטי החשבון שלך",
   REGISTER_TITLE: "יצירת חשבון",
@@ -31,121 +33,75 @@ export const UI_TEXT = {
   GO_TO_LOGIN: "כניסה למערכת",
   CREATE_ACCOUNT: "יצירת חשבון",
 
-  // Profile
+  // ─── Profile ───────────────────────────────────────────────────
   PROFILE_TITLE: "הפרופיל שלי",
   PERSONAL_DETAILS: "פרטים אישיים",
+  EDIT_PROFILE: "עריכת פרטים אישיים",
   PHONE_NUMBER_LABEL: "מספר טלפון",
   NO_PHONE_NUMBER: "לא הוזן מספר טלפון",
   FUTURE_RESERVATIONS: "הזמנות עתידיות",
   PAST_RESERVATIONS: "הזמנות קודמות",
   NO_FUTURE_RESERVATIONS: "אין לי הזמנות עתידיות",
   NO_PAST_RESERVATIONS: "אין לי הזמנות קודמות",
-  LOADING_PROFILE: "טעינת פרופיל...",
 
-  // Admin
-  ADMIN_RESERVATIONS_TITLE: "ניהול הזמנות",
-  ADMIN_DASHBOARD_TITLE: "ניהול המערכת",
-  ADMIN_ENTER_MANAGEMENT: "כניסה לניהול",
-  ADMIN_RESERVATIONS_DESCRIPTION: "צפייה, עריכה וביטול של הזמנות במערכת",
-  ADMIN_HOTELS_DESCRIPTION: "הוספה, עריכה ומחיקה של מלונות",
-  ADMIN_ROOMS_DESCRIPTION: "הוספה, עריכה ומחיקה של חדרים",
-  ADMIN_HOTELS_TITLE: "ניהול מלונות",
-  ADMIN_ROOMS_TITLE: "ניהול חדרים",
-  ADMIN_ADD_HOTEL: "הוספת מלון",
-  ADMIN_EDIT_HOTEL: "עריכת מלון",
-  ADMIN_DELETE_HOTEL: "מחיקת מלון",
-  ADMIN_MANAGE_ROOMS: "ניהול חדרים",
-  COMING_NEXT: "בשלב הבא",
-  BOOKING_NUMBER: "מספר הזמנה",
-  GUEST_NAME: "שם",
-  RESERVATION_STATUS: "סטטוס הזמנה",
+  // ─── Hotels ────────────────────────────────────────────────────
+  HOTEL_DETAILS: "פרטי המלון",
+  HOTEL_NAME: "מלון",
+  AVAILABLE_ROOMS: "חדרים זמינים",
+  VIEW_ROOMS: "אפשרויות לינה",
   STARS: "דירוג",
   IMAGE_URL: "קישור לתמונה",
-  CONFIRM_CREATE_HOTEL_TITLE: "אישור הוספת מלון",
-  CONFIRM_CREATE_HOTEL_MESSAGE: "האם לשמור את המלון החדש במערכת?",
-  SAVING: "שמירה...",
-  SAVING_IN_PROGRESS: "שומרת...",
-  CONFIRM_EDIT_HOTEL_TITLE: "אישור עריכת מלון",
-  CONFIRM_EDIT_HOTEL_MESSAGE: "האם לשמור את השינויים במלון?",
-  CONFIRM_DELETE_HOTEL_TITLE: "אישור מחיקת מלון",
-  CONFIRM_DELETE_HOTEL_MESSAGE: "האם למחוק את המלון מהמערכת?",
-  DELETING: "מחיקה...",
-  ADMIN_ROOM_FORM_TITLE: "פרטי חדר",
-  ADMIN_ADD_ROOM: "הוספת חדר",
-  ADMIN_EDIT_ROOM: "עריכת חדר",
-  ADMIN_DELETE_ROOM: "מחיקת חדר",
-  ADMIN_ADD_ROOM_ROW: "הוספת חדר נוסף",
-  ADMIN_REMOVE_ROOM_ROW: "הסרת חדר",
+  BOOK_ROOM: "הזמנה",
+  CONTINUE_BOOKING: "להמשך ההזמנה",
+
+  // ─── Rooms ─────────────────────────────────────────────────────
+  ROOM_NAME: "חדר",
+  ROOM_SIZE: "גודל החדר",
+  MAX_CAPACITY: "מקומות לינה",
   MAX_GUESTS: "מספר אורחות מקסימלי",
   PRICE: "מחיר ללילה",
-  CONFIRM_CREATE_ROOM_TITLE: "אישור הוספת חדר",
-  CONFIRM_CREATE_ROOM_MESSAGE: "האם לשמור את החדר החדש במערכת?",
-  CONFIRM_EDIT_ROOM_TITLE: "אישור עריכת חדר",
-  CONFIRM_EDIT_ROOM_MESSAGE: "האם לשמור את השינויים בחדר?",
-  CONFIRM_DELETE_ROOM_TITLE: "אישור מחיקת חדר",
-  CONFIRM_DELETE_ROOM_MESSAGE: "האם למחוק את החדר מהמערכת?",
-  EDIT_PROFILE: "עריכת פרטים אישיים",
-  ADMIN_EDIT_RESERVATION: "עריכת הזמנה",
-  ADMIN_NO_RESERVATIONS: "אין הזמנות להצגה",
-  ADMIN_SEARCH_RESERVATIONS: "חיפוש לפי שם, מלון, חדר, אורח/ת או מספר הזמנה",
-  ADMIN_NO_SEARCH_RESULTS: "לא נמצאו הזמנות התואמות את החיפוש",
-  ADMIN_CLEAR_SEARCH: "ניקוי חיפוש",
-  RESERVATION_DATES: "תאריכי הזמנה",
-  RESERVATION_HOTEL: "מלון",
-  RESERVATION_ROOM: "חדר",
-  RESERVATION_EMAIL: "אימייל",
-  CONFIRM_EDIT_RESERVATION_TITLE: "אישור עריכת הזמנה",
-  CONFIRM_EDIT_RESERVATION_MESSAGE: "האם לשמור את השינויים בהזמנה?",
-  STATUS_PENDING: "בהמתנה",
-  STATUS_CONFIRMED: "מאושרת",
-  STATUS_CANCELLED: "מבוטלת",
+  PRICE_PER_NIGHT: "מחיר ללילה, ללא מע״מ",
+  ACCESSIBLE_ROOM: "חדר נגיש",
+  SELECT_ROOM: "לבחירת חדר",
+  ROOM_SELECTED: "החדר נבחר",
+  CHANGE_ROOM: "החלפת חדר אחר",
 
-
-  // Search
+  // ─── Search ────────────────────────────────────────────────────
   SEARCH_TITLE: "חיפוש מלונות",
+  SEARCH_BUTTON: "חיפוש",
   COUNTRY_LABEL: "מדינה",
   COUNTRY_PLACEHOLDER: "ישראל",
   CITY_LABEL: "עיר",
   CITY_PLACEHOLDER: "תל אביב",
+  DESCRIPTION_LABEL: "תיאור",
   HOTEL_NAME_LABEL: "שם המלון",
   HOTEL_NAME_PLACEHOLDER: "חיפוש לפי שם",
   CHECK_IN_LABEL: "תאריך הגעה",
   CHECK_OUT_LABEL: "תאריך עזיבה",
   ACCOMMODATION_CAPACITY_LABEL: "מקומות לינה",
-  SEARCH_BUTTON: "חיפוש",
-
-  // Hotel
-  HOTEL_DETAILS: "פרטי המלון",
-  HOTEL_NAME: "מלון",
-  AVAILABLE_ROOMS: "חדרים זמינים",
-  VIEW_ROOMS: "אפשרויות לינה",
-  ROOM_SIZE: "גודל החדר",
-  PRICE_PER_NIGHT: "מחיר ללילה, ללא מע״מ",
-  MAX_CAPACITY: "מקומות לינה",
-  BOOK_ROOM: "הזמנה",
-  CONTINUE_BOOKING: "להמשך ההזמנה",
-
-  // Room
-  ROOM_NAME: "חדר",
-  SELECT_ROOM: "לבחירת חדר",
-  ROOM_SELECTED: "החדר נבחר",
-  CHANGE_ROOM: "החלפת חדר אחר",
-  ACCESSIBLE_ROOM: "חדר נגיש",
-
-  //Search
   AVAILABLE_ROOMS_SEARCH_TITLE: "חיפוש חדרים פנויים",
   AVAILABLE_ROOMS_SEARCH_SUBTITLE: " חיפוש חדרים פנויים בכל המלונות לפי תאריכים",
   SEARCH_AVAILABLE_ROOMS: "חיפוש חדרים",
   AVAILABLE_ROOMS_RESULTS: "חדרים פנויים בתאריכים שבחרת",
   CLEAR_SEARCH: "ניקוי חיפוש",
 
-  // Reservation
+  // ─── Booking & Reservation ─────────────────────────────────────
+  BOOKING_NUMBER: "מספר הזמנה",
   RESERVATION_DETAILS: "פרטי ההזמנה",
   RESERVATION_CONFIRMED: "ההזמנה אושרה",
   RESERVATION_CONFIRMED_SUBTITLE: "נשמח לארח אותך",
   CONFIRM_BOOKING: "אישור הזמנה",
   TOTAL_PRICE_INCLUDING_VAT: "מחיר כולל מע״מ",
   BACK_TO_HOTELS: "חזרה למלונות",
+  GUEST_NAME: "שם",
+  RESERVATION_STATUS: "סטטוס הזמנה",
+  RESERVATION_DATES: "תאריכי הזמנה",
+  RESERVATION_HOTEL: "מלון",
+  RESERVATION_ROOM: "חדר",
+  RESERVATION_EMAIL: "אימייל",
+  STATUS_PENDING: "בהמתנה",
+  STATUS_CONFIRMED: "מאושרת",
+  STATUS_CANCELLED: "מבוטלת",
 
   // Booking Review Modal
   BOOKING_REVIEW_TITLE: "אישור פרטי ההזמנה",
@@ -156,7 +112,52 @@ export const UI_TEXT = {
   BOOKING_REVIEW_FINAL_CONFIRM: "אישור סופי",
   BACK_TO_EDITING: "חזרה לעריכה",
 
-  // Generic Actions
+  // ─── Admin ─────────────────────────────────────────────────────
+  ADMIN_DASHBOARD_TITLE: "ניהול המערכת",
+  ADMIN_ENTER_MANAGEMENT: "כניסה לניהול",
+  COMING_NEXT: "בשלב הבא",
+
+  // Admin — Hotels
+  ADMIN_HOTELS_TITLE: "ניהול מלונות",
+  ADMIN_HOTELS_DESCRIPTION: "הוספה, עריכה ומחיקה של מלונות",
+  ADMIN_ADD_HOTEL: "הוספת מלון",
+  ADMIN_EDIT_HOTEL: "עריכת מלון",
+  ADMIN_DELETE_HOTEL: "מחיקת מלון",
+  ADMIN_MANAGE_ROOMS: "ניהול חדרים",
+  CONFIRM_CREATE_HOTEL_TITLE: "אישור הוספת מלון",
+  CONFIRM_CREATE_HOTEL_MESSAGE: "האם לשמור את המלון החדש במערכת?",
+  CONFIRM_EDIT_HOTEL_TITLE: "אישור עריכת מלון",
+  CONFIRM_EDIT_HOTEL_MESSAGE: "האם לשמור את השינויים במלון?",
+  CONFIRM_DELETE_HOTEL_TITLE: "אישור מחיקת מלון",
+  CONFIRM_DELETE_HOTEL_MESSAGE: "האם למחוק את המלון מהמערכת?",
+
+  // Admin — Rooms
+  ADMIN_ROOMS_TITLE: "ניהול חדרים",
+  ADMIN_ROOMS_DESCRIPTION: "הוספה, עריכה ומחיקה של חדרים",
+  ADMIN_ROOM_FORM_TITLE: "פרטי חדר",
+  ADMIN_ADD_ROOM: "הוספת חדר",
+  ADMIN_EDIT_ROOM: "עריכת חדר",
+  ADMIN_DELETE_ROOM: "מחיקת חדר",
+  ADMIN_ADD_ROOM_ROW: "הוספת חדר נוסף",
+  ADMIN_REMOVE_ROOM_ROW: "הסרת חדר",
+  CONFIRM_CREATE_ROOM_TITLE: "אישור הוספת חדר",
+  CONFIRM_CREATE_ROOM_MESSAGE: "האם לשמור את החדר החדש במערכת?",
+  CONFIRM_EDIT_ROOM_TITLE: "אישור עריכת חדר",
+  CONFIRM_EDIT_ROOM_MESSAGE: "האם לשמור את השינויים בחדר?",
+  CONFIRM_DELETE_ROOM_TITLE: "אישור מחיקת חדר",
+  CONFIRM_DELETE_ROOM_MESSAGE: "האם למחוק את החדר מהמערכת?",
+
+  // Admin — Reservations
+  ADMIN_RESERVATIONS_TITLE: "ניהול הזמנות",
+  ADMIN_RESERVATIONS_DESCRIPTION: "צפייה, עריכה וביטול של הזמנות במערכת",
+  ADMIN_EDIT_RESERVATION: "עריכת הזמנה",
+  ADMIN_NO_RESERVATIONS: "אין הזמנות להצגה",
+  ADMIN_SEARCH_RESERVATIONS: "חיפוש לפי שם, מלון, חדר, אורח/ת או מספר הזמנה",
+  ADMIN_NO_SEARCH_RESULTS: "לא נמצאו הזמנות התואמות את החיפוש",
+  CONFIRM_EDIT_RESERVATION_TITLE: "אישור עריכת הזמנה",
+  CONFIRM_EDIT_RESERVATION_MESSAGE: "האם לשמור את השינויים בהזמנה?",
+
+  // ─── Generic Actions ───────────────────────────────────────────
   SAVE: "שמירה",
   UPDATE: "עדכון",
   DELETE: "מחיקה",
@@ -164,13 +165,24 @@ export const UI_TEXT = {
   CLOSE: "סגירה",
   BACK: "חזרה",
 
-  // Success Messages
+  // ─── Loading States ────────────────────────────────────────────
+  LOADING: "טעינת מידע...",
+  LOADING_HOTELS: "טעינת מלונות...",
+  LOADING_HOTEL_DETAILS: "טעינת פרטי המלון...",
+  LOADING_ROOMS: "טעינת חדרים...",
+  LOADING_RESERVATIONS: "טעינת הזמנות...",
+  LOADING_PROFILE: "טעינת פרופיל...",
+  SAVING: "שמירה...",
+  SAVING_IN_PROGRESS: "שומרת...",
+  DELETING: "מחיקה...",
+
+  // ─── Success Messages ──────────────────────────────────────────
   ACCOUNT_CREATED: "החשבון נוצר בהצלחה",
   LOGIN_SUCCESS: "הכניסה הושלמה בהצלחה",
   CHANGES_SAVED: "השינויים נשמרו",
   BOOKING_CREATED: "ההזמנה הושלמה בהצלחה",
 
-  // Empty States
+  // ─── Empty States ──────────────────────────────────────────────
   NO_RESULTS: "לא נמצאו תוצאות",
   NO_HOTELS_FOUND: "לא נמצאו מלונות שמתאימים לחיפוש",
   NO_AVAILABLE_ROOMS: "לא נמצאו חדרים שמתאימים לחיפוש",
@@ -180,18 +192,11 @@ export const UI_TEXT = {
   ROOM_NOT_FOUND: "החדר לא נמצא",
   NO_ROOMS_IN_HOTEL: "אין חדרים זמינים במלון זה",
 
-  // Generic Errors
+  // ─── Errors ────────────────────────────────────────────────────
   SOMETHING_WENT_WRONG: "אירעה שגיאה",
   TRY_AGAIN_LATER: "ניתן לנסות שוב מאוחר יותר",
 
-  // Loading States
-  LOADING: "טעינת מידע...",
-  LOADING_HOTELS: "טעינת מלונות...",
-  LOADING_HOTEL_DETAILS: "טעינת פרטי המלון...",
-  LOADING_ROOMS: "טעינת חדרים...",
-  LOADING_RESERVATIONS: "טעינת הזמנות...",
-
-  // Generic UI
+  // ─── Generic UI ────────────────────────────────────────────────
   AREA_UNIT: "מ״ר",
   NO_DESCRIPTION: "אין תיאור זמין",
   UNKNOWN_LOCATION: "מיקום לא ידוע",

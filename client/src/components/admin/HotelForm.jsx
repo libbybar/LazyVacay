@@ -86,7 +86,7 @@ const HotelForm = ({
       </FormGrid>
 
       <InputGroup>
-        <Label>{UI_TEXT.DESCRIPTION}</Label>
+        <Label>{UI_TEXT.DESCRIPTION_LABEL}</Label>
 
         <TextArea
           name="description"
