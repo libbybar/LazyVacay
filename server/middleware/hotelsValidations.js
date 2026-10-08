@@ -15,11 +15,11 @@ export const validateHotelInput = (req, res, next) => {
       "Name, country, city, and stars are all required fields."));
   }
 
-  if (typeof stars !== 'number' || stars < 1 || stars > 5) {
+  if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
     return next(new ApiError(
       400,
       ERROR_CODES.INVALID_HOTEL_INPUT,
-      "Stars must be a valid number between 1 and 5."));
+      "Stars must be a whole number between 1 and 5."));
   }
 
   if (typeof name !== 'string' || typeof country !== 'string' || typeof city !== 'string') {
@@ -27,6 +27,14 @@ export const validateHotelInput = (req, res, next) => {
       400,
       ERROR_CODES.INVALID_HOTEL_INPUT,
       "Name, country, and city must be valid strings."
+    ));
+  }
+
+  if ([name, country, city].some((value) => value.trim() === '')) {
+    return next(new ApiError(
+      400,
+      ERROR_CODES.INVALID_HOTEL_INPUT,
+      "Name, country, and city cannot be blank."
     ));
   }
 

@@ -1,25 +1,8 @@
 import { ERROR_CODES } from "../constants/errorCodes.js";
 import { ApiError } from "./ApiError.js";
 
-function parseFlexibleDate(dateStr) {
-  if (!dateStr || typeof dateStr !== "string") return null;
-  if (/^\d{2}[/-]\d{2}[/-]\d{4}$/.test(dateStr)) {
-    const parts = dateStr.split(/[/-]/);
-    const day = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
-    const date = new Date(year, month, day);
-    if (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) {
-      return date;
-    }
-    return null;
-  }
-  const date = new Date(dateStr);
-  if (date instanceof Date && !isNaN(date.getTime())) {
-    return date;
-  }
-  return null;
-}
+const DAY_FIRST_DATE = /^(\d{2})([/-])(\d{2})\2(\d{4})$/;
+const YEAR_FIRST_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 export const validateReservation = (req, res, next) => {
   const { roomId, hotelId, startDate, endDate } = req.body;
@@ -32,19 +15,16 @@ export const validateReservation = (req, res, next) => {
     ));
   }
 
-  const start = parseFlexibleDate(startDate);
-  const end = parseFlexibleDate(endDate);
+  const start = parseCalendarDate(startDate);
+  const end = parseCalendarDate(endDate);
 
   if (!start || !end) {
     return next(new ApiError(
       400,
       ERROR_CODES.INVALID_DATE_FORMAT,
-      "Dates must be in a valid format (DD/MM/YYYY or YYYY-MM-DD)."
+      "Dates must be an existing day in the format DD/MM/YYYY, DD-MM-YYYY or YYYY-MM-DD."
     ));
   }
-
-  start.setHours(0, 0, 0, 0);
-  end.setHours(0, 0, 0, 0);
 
   if (start >= end) {
     return next(new ApiError(
@@ -54,9 +34,7 @@ export const validateReservation = (req, res, next) => {
     ));
   }
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  if (start < today) {
+  if (start < getStartOfTodayUtc()) {
     return next(new ApiError(
       400,
       ERROR_CODES.PAST_BOOKING_DATE,
@@ -66,4 +44,42 @@ export const validateReservation = (req, res, next) => {
 
   req.validatedDates = { start, end };
   next();
+};
+
+const parseCalendarDate = (text) => {
+  const dateParts = extractDateParts(text);
+
+  return dateParts ? buildUtcDate(dateParts) : null;
+};
+
+const extractDateParts = (text) => {
+  if (typeof text !== "string") return null;
+
+  const dayFirst = DAY_FIRST_DATE.exec(text);
+  if (dayFirst) {
+    return { day: Number(dayFirst[1]), month: Number(dayFirst[3]), year: Number(dayFirst[4]) };
+  }
+
+  const yearFirst = YEAR_FIRST_DATE.exec(text);
+  if (yearFirst) {
+    return { year: Number(yearFirst[1]), month: Number(yearFirst[2]), day: Number(yearFirst[3]) };
+  }
+
+  return null;
+};
+
+const buildUtcDate = ({ year, month, day }) => {
+  const date = new Date(Date.UTC(year, month - 1, day));
+  const isExistingDay =
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day;
+
+  return isExistingDay ? date : null;
+};
+
+const getStartOfTodayUtc = () => {
+  const now = new Date();
+
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 };

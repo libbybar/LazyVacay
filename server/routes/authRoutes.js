@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../prismaClient.js";
 import { ERROR_CODES } from "../constants/errorCodes.js";
 import { ApiError } from "../middleware/ApiError.js";
-import { validateRegisterInput, validateProfileUpdate } from "../middleware/authValidations.js";
+import { validateRegisterInput, validateLoginInput, validateProfileUpdate } from "../middleware/authValidations.js";
 import { requireAuth } from "../middleware/authMiddleware.js";
 
 
@@ -60,17 +60,10 @@ router.post("/register", validateRegisterInput, async (req, res, next) => {
 });
 
 
-router.post("/login", async (req, res, next) => {
+router.post("/login", validateLoginInput, async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    
-    if (!email || !password) {
-      return next(new ApiError(
-        400,
-        ERROR_CODES.MISSING_REQUIRED_FIELDS,
-        "Email and password are required."));
-    }
-    
+
     const normalizedEmail = email.toLowerCase().trim();
     
     const user = await prisma.user.findUnique({
@@ -214,7 +207,7 @@ router.patch("/profile", requireAuth, validateProfileUpdate, async (req, res, ne
       where: { id: userId },
       data: {
         firstName: firstName.trim(),
-        lastName: lastName ? lastName.trim() : null,
+        lastName: lastName.trim(),
         email: normalizedEmail,
         phoneNumber: phoneNumber ? phoneNumber.trim() : null,
       },
