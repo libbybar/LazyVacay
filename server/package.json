@@ -1,4 +1,7 @@
 {
+  "name": "lazyvacay-server",
+  "description": "Express API for the LazyVacay hotel booking app",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js",

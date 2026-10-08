@@ -1,5 +1,6 @@
 {
-  "name": "client",
+  "name": "lazyvacay-client",
+  "description": "React client for the LazyVacay hotel booking app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
